@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+ajedrezLite
 
 # CMake
 CMakeLists.txt.user
