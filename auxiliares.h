@@ -13,7 +13,7 @@ pair<int,int> mp(int a, int b);
 vector<pair<int,int>> ordenarVectorPares(vector<pair<int,int>> &v);
 tablero inicializarTablero();
 coordenada setCoord(int i, int j);
-tablero tableroActual ( posicion const &p );
+tablero tableroActual (const posicion &p );
 
 //Ejercicios
 
@@ -28,28 +28,28 @@ int jugadorEn(tablero t, coordenada c);
 casilla setCasilla(int, int);
 
 //5.2.2. Predicados
-bool esJugadorValido(jugador);
-bool esTableroValido(tablero);
-bool casillasValidas(tablero t);
+bool esJugadorValido(jugador j);
+bool esTableroValido(const tablero &t);
+bool casillasValidas(const tablero &t);
 bool esCasillaVacia(casilla c);
 bool esPiezaValida(pieza p);
-bool esMatriz8(tablero t);
-bool sinPeonesNoCoronados(tablero t);
-bool cantidadValidaDePiezas(tablero t);
-bool cantidadPeonesValidos(tablero t);
-bool cantidadReyesValidos(tablero t);
-bool cantidadAlfilesValidos(tablero t);
-bool cantidadTorresValidas(tablero t);
+bool esMatriz8(const tablero &t);
+bool sinPeonesNoCoronados(const tablero &t);
+bool cantidadValidaDePiezas(const tablero &t);
+bool cantidadPeonesValidos(const tablero &t);
+bool cantidadReyesValidos(const tablero &t);
+bool cantidadAlfilesValidos(const tablero &t);
+bool cantidadTorresValidas(const tablero &t);
 tablero tableroInicial();
-bool casillaAtacada(casilla c, tablero t, jugador j);
-bool ataca(tablero t, casilla c, casilla d);
-bool movimientoPiezaValido(tablero t, coordenada c, coordenada d);
+bool casillaAtacada(casilla c, const tablero &t, jugador j);
+bool ataca(const tablero &t, casilla c, casilla d);
+bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d);
-bool movimientoValidoAlfil(tablero t, coordenada c, coordenada d);
-bool noHayBloqueoAlfil(tablero t, casilla c, casilla d);
-bool movimientoValidoTorre(tablero t, coordenada c, coordenada d);
+bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d);
+bool noHayBloqueoAlfil(const tablero &t, casilla c, casilla d);
+bool movimientoValidoTorre(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoRey(coordenada c, coordenada d);
-bool capturaPeonValida(tablero t, jugador j, coordenada c, coordenada d);
-casilla casillaEn(tablero t, coordenada c);
+bool capturaPeonValida(const tablero &t, jugador j, coordenada c, coordenada d);
+casilla casillaEn(const tablero &t, coordenada c);
 
 #endif //AJEDREZLITE_AUXILIARES_H

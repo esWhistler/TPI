@@ -33,11 +33,11 @@ bool esJugadorValido(jugador j){
     return j == NEGRO || j == BLANCO;
 }
 
-bool esTableroValido(tablero t){
+bool esTableroValido(const tablero &t){
     return esMatriz8(t) && casillasValidas(t) && sinPeonesNoCoronados(t) && cantidadValidaDePiezas(t);
 }
 
-bool esMatriz8(tablero t){
+bool esMatriz8(const tablero &t){
     int n = t.size();
     bool res = n == ANCHO_TABLERO;
     for (int i = 0; i < ANCHO_TABLERO && res; ++i) {
@@ -46,7 +46,7 @@ bool esMatriz8(tablero t){
     return res;
 }
 
-bool casillasValidas(tablero t){
+bool casillasValidas(const tablero &t){
     int n = t.size();
     bool res = true;
     for (int i = 0; i < n && res; ++i) {
@@ -66,15 +66,15 @@ bool esPiezaValida(pieza p){
     return PEON <= p && p <= REY;
 }
 
-pieza piezaEn(tablero t, coordenada c){
+pieza piezaEn(const tablero &t, coordenada c){
     return t[c.first][c.second].first;
 }
 
-jugador jugadorEn(tablero t, coordenada c){
+jugador jugadorEn(const tablero &t, coordenada c){
     return t[c.first][c.second].second;
 }
 
-bool sinPeonesNoCoronados(tablero t){
+bool sinPeonesNoCoronados(const tablero &t){
     bool res = true;
     for (int i = 0; i < ANCHO_TABLERO && res; ++i) {
         res &= piezaEn(t, setCoord(0, i)) != PEON;
@@ -85,29 +85,29 @@ bool sinPeonesNoCoronados(tablero t){
     return res;
 }
 
-bool cantidadValidaDePiezas(tablero t){
+bool cantidadValidaDePiezas(const tablero &t){
     return cantidadPeonesValidos(t) && cantidadReyesValidos(t) && cantidadAlfilesValidos(t) && cantidadTorresValidas(t);
 }
 
-bool cantidadPeonesValidos(tablero t){
+bool cantidadPeonesValidos(const tablero &t){
     return aparicionesEnTablero(t, cPEON_B) <= ANCHO_TABLERO &&
     aparicionesEnTablero(t, cPEON_N) <= ANCHO_TABLERO;
 }
 
-bool cantidadReyesValidos(tablero t){
+bool cantidadReyesValidos(const tablero &t){
     return aparicionesEnTablero(t, cREY_B) == 1 && aparicionesEnTablero(t, cREY_N) == 1;
 }
 
-bool cantidadAlfilesValidos(tablero t){
+bool cantidadAlfilesValidos(const tablero &t){
     return aparicionesEnTablero(t, cALFIL_B) <= 2 && aparicionesEnTablero(t, cALFIL_N) <= 2;
 }
 
-bool cantidadTorresValidas(tablero t){
+bool cantidadTorresValidas(const tablero &t){
     return aparicionesEnTablero(t, cTORRE_B) <= 2 + (ANCHO_TABLERO - aparicionesEnTablero(t, cPEON_B)) &&
     aparicionesEnTablero(t, cTORRE_N) <= 2 + (ANCHO_TABLERO - aparicionesEnTablero(t, cPEON_N));
 }
 
-int aparicionesEnTablero(tablero t, casilla p){
+int aparicionesEnTablero(const tablero &t, casilla p){
     int apariciones = 0;
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int j = 0; j < ANCHO_TABLERO; ++j) {
@@ -130,7 +130,7 @@ tablero tableroInicial(){
     };
 }
 
-bool casillaAtacada(casilla c, tablero t, jugador j){
+bool casillaAtacada(casilla c, const tablero &t, jugador j){
     bool estaAtacada = false;
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
@@ -143,7 +143,7 @@ bool casillaAtacada(casilla c, tablero t, jugador j){
     return estaAtacada;
 }
 
-bool ataca(tablero t, casilla c, casilla d){
+bool ataca(const tablero &t, casilla c, casilla d){
     return (c != cVACIA) &&
            ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
             (piezaEn(t, c) == PEON && capturaPeonValida(t, jugadorEn(t, c), c, d)));
@@ -158,15 +158,15 @@ bool movimientoPiezaValido(tablero t, coordenada c, coordenada d){
 
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
     return (c.first == d.first) &&
-           ((j == BLANCO && c.first == d.first -1) ||
-            (j == NEGRO && c.first == d.first + 1));
+           ((j == BLANCO && c.second == d.second - 1) ||
+            (j == NEGRO && c.second == d.second + 1));
 }
 
-bool movimientoValidoAlfil(tablero t, coordenada c, coordenada d){
+bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d){
     return abs(c.first - d.first) == abs(c.second - d.second) && noHayBloqueoAlfil(t, c, d);
 }
 
-bool noHayBloqueoAlfil(tablero t, casilla c, casilla d){
+bool noHayBloqueoAlfil(const tablero &t, casilla c, casilla d){
     bool res = false;
     int i = min(c.first, d.first);
     int hastai = max(c.first, d.first);
@@ -181,7 +181,7 @@ bool noHayBloqueoAlfil(tablero t, casilla c, casilla d){
     return res;
 }
 
-bool movimientoValidoTorre(tablero t, coordenada c, coordenada d){
+bool movimientoValidoTorre(const tablero &t, coordenada c, coordenada d){
     bool res = true;
     int desdeFila = c.first;
     int hastaFila = d.first;
@@ -219,10 +219,10 @@ bool movimientoValidoRey(coordenada c, coordenada d){
     return (abs(a - j) == 0 && abs(b - k) == 1) || (abs(a - j) == 1 && abs(b - k) == 1) || (abs(a - j) == 1 && abs(b - k) == 0);
 }
 
-bool capturaPeonValida(tablero t, jugador j, coordenada c, coordenada d){
+bool capturaPeonValida(const tablero &t, jugador j, coordenada c, coordenada d){
     return (jugadorEn(t, c) == BLANCO && c.second == d.second - 1) || (jugadorEn(t, c) == NEGRO && c.second == d.second +1);
 }
 
-casilla casillaEn(tablero t, coordenada c){
+casilla casillaEn(const tablero &t, coordenada c){
     return t[c.first][c.second];
 }
