@@ -23,8 +23,8 @@ int aparicionesEnTablero(tablero t, casilla p);
 int colorPieza(tablero t, coordenada c);
 jugador contrincante(jugador j);
 jugador jugadorDeTurno(posicion p);
-int piezaEn(tablero t, coordenada c);
-int jugadorEn(tablero t, coordenada c);
+int piezaEn(const tablero &t, coordenada c);
+int jugadorEn(const tablero &t, coordenada c);
 casilla setCasilla(int, int);
 
 //5.2.2. Predicados

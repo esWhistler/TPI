@@ -149,7 +149,7 @@ bool ataca(const tablero &t, casilla c, casilla d){
             (piezaEn(t, c) == PEON && capturaPeonValida(t, jugadorEn(t, c), c, d)));
 }
 
-bool movimientoPiezaValido(tablero t, coordenada c, coordenada d){
+bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d){
     return  (piezaEn(t, c) == PEON && movimientoValidoPeon(jugadorEn(t, c), c, d)) ||
             (piezaEn(t, c) == ALFIL && movimientoValidoAlfil(t, c, d)) ||
             (piezaEn(t, c) == TORRE && movimientoValidoTorre(t, c, d)) ||

@@ -14,4 +14,4 @@ bool hayJaqueDescubierto ( posicion const &p );
 void ejecutarSecuenciaForzada ( posicion &p, secuencia s );
 int seVieneElJaqueEn ( posicion const & p );
 
-#endif //
+#endif // EJERCICIOS_H
