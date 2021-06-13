@@ -15,10 +15,19 @@ bool posicionInicial ( posicion const &p ) {
 }
 // EJERCICIO 3
 vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
-    vector <coordenada> cA;
-    // completar codigo
+    tablero tablero = p.first;
+    vector<coordenada> cA;
+    for (int i = 0; i < ANCHO_TABLERO; ++i) {
+        for (int k = 0; k < ANCHO_TABLERO; ++k) {
+            if(casillaAtacada(setCoord(i, k), tablero, j)){
+                cA.push_back(setCoord(i, k));
+            }
+        }
+    }
     return cA;
 }
+
+
 // EJERCICIO 4
 bool posicionSiguienteCorrecta ( posicion const &p1, posicion const &p2, coordenada o, coordenada d ) {
     bool resp = false;

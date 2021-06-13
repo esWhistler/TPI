@@ -129,3 +129,100 @@ tablero tableroInicial(){
             {cTORRE_B, cVACIA, cALFIL_B, cVACIA, cREY_B, cALFIL_B, cVACIA, cTORRE_B},
     };
 }
+
+bool casillaAtacada(casilla c, tablero t, jugador j){
+    bool estaAtacada = false;
+    for (int i = 0; i < ANCHO_TABLERO; ++i) {
+        for (int k = 0; k < ANCHO_TABLERO; ++k) {
+            coordenada target = setCoord(i, k);
+            if((target != c) && (jugadorEn(t, target) == j)){
+                estaAtacada |= ataca(t, setCoord(i, k), c);
+            }
+        }
+    }
+    return estaAtacada;
+}
+
+bool ataca(tablero t, casilla c, casilla d){
+    return (c != cVACIA) &&
+           ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
+            (piezaEn(t, c) == PEON && capturaPeonValida(t, jugadorEn(t, c), c, d)));
+}
+
+bool movimientoPiezaValido(tablero t, coordenada c, coordenada d){
+    return  (piezaEn(t, c) == PEON && movimientoValidoPeon(jugadorEn(t, c), c, d)) ||
+            (piezaEn(t, c) == ALFIL && movimientoValidoAlfil(t, c, d)) ||
+            (piezaEn(t, c) == TORRE && movimientoValidoTorre(t, c, d)) ||
+            (piezaEn(t, c) == REY && movimientoValidoRey(c, d));
+}
+
+bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
+    return (c.first == d.first) &&
+           ((j == BLANCO && c.first == d.first -1) ||
+            (j == NEGRO && c.first == d.first + 1));
+}
+
+bool movimientoValidoAlfil(tablero t, coordenada c, coordenada d){
+    return abs(c.first - d.first) == abs(c.second - d.second) && noHayBloqueoAlfil(t, c, d);
+}
+
+bool noHayBloqueoAlfil(tablero t, casilla c, casilla d){
+    bool res = false;
+    int i = min(c.first, d.first);
+    int hastai = max(c.first, d.first);
+    int j = min(c.second, d.second);
+    int hastaj = max(c.second, d.second);
+
+    while (i < hastai && !res) {
+        res &= esCasillaVacia(casillaEn(t, setCoord(i, j)));
+        i++;
+        j++;
+    }
+    return res;
+}
+
+bool movimientoValidoTorre(tablero t, coordenada c, coordenada d){
+    bool res = true;
+    int desdeFila = c.first;
+    int hastaFila = d.first;
+    int desdeColumna = c.second;
+    int hastaColumna = d.second;
+
+    if(desdeFila == hastaFila){
+        int mod = (desdeColumna < hastaColumna ? 1 : -1);
+        for (int i = desdeColumna + mod; i != hastaColumna && res; i += mod) {
+            if(piezaEn(t, setCoord(desdeFila, i)) != 0){
+                res = false;
+            }
+        }
+    } else if (desdeColumna == hastaColumna){
+        int mod = (desdeFila < hastaFila ? 1 : -1);
+        for (int i = desdeFila + mod; i != hastaFila && res; i += mod) {
+            if(piezaEn(t, setCoord(i, desdeColumna)) != 0){
+                res = false;
+            }
+        }
+    } else {
+        res = false;
+    }
+
+    return res;
+}
+
+bool movimientoValidoRey(coordenada c, coordenada d){
+    int a = c.first;
+    int b = c.second;
+
+    int j = d.first;
+    int k = d.second;
+
+    return (abs(a - j) == 0 && abs(b - k) == 1) || (abs(a - j) == 1 && abs(b - k) == 1) || (abs(a - j) == 1 && abs(b - k) == 0);
+}
+
+bool capturaPeonValida(tablero t, jugador j, coordenada c, coordenada d){
+    return (jugadorEn(t, c) == BLANCO && c.second == d.second - 1) || (jugadorEn(t, c) == NEGRO && c.second == d.second +1);
+}
+
+casilla casillaEn(tablero t, coordenada c){
+    return t[c.first][c.second];
+}

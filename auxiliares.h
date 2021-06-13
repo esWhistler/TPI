@@ -41,6 +41,15 @@ bool cantidadReyesValidos(tablero t);
 bool cantidadAlfilesValidos(tablero t);
 bool cantidadTorresValidas(tablero t);
 tablero tableroInicial();
-
+bool casillaAtacada(casilla c, tablero t, jugador j);
+bool ataca(tablero t, casilla c, casilla d);
+bool movimientoPiezaValido(tablero t, coordenada c, coordenada d);
+bool movimientoValidoPeon(jugador j, coordenada c, coordenada d);
+bool movimientoValidoAlfil(tablero t, coordenada c, coordenada d);
+bool noHayBloqueoAlfil(tablero t, casilla c, casilla d);
+bool movimientoValidoTorre(tablero t, coordenada c, coordenada d);
+bool movimientoValidoRey(coordenada c, coordenada d);
+bool capturaPeonValida(tablero t, jugador j, coordenada c, coordenada d);
+casilla casillaEn(tablero t, coordenada c);
 
 #endif //AJEDREZLITE_AUXILIARES_H
