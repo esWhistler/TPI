@@ -9,9 +9,11 @@ using namespace std;
 
 // DEFINICIONES DE TIPO
 // DEFINICIONES DE TIPO
-typedef pair < int, int > casilla;
+typedef int jugador;
+typedef int pieza;
+typedef pair < pieza, jugador > casilla;
 typedef vector < vector < casilla > > tablero;
-typedef pair < tablero, int > posicion;
+typedef pair < tablero, jugador > posicion;
 typedef pair < int, int > coordenada;
 typedef vector < pair < coordenada, coordenada > > secuencia;
 
