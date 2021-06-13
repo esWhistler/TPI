@@ -19,8 +19,8 @@ tablero tableroActual (const posicion &p );
 
 
 //5.2.1. Auxiliares
-int aparicionesEnTablero(tablero t, casilla p);
-int colorPieza(tablero t, coordenada c);
+int aparicionesEnTablero(const tablero &t, casilla p);
+int colorPieza(const tablero &t, coordenada c);
 jugador contrincante(jugador j);
 jugador jugadorDeTurno(posicion p);
 int piezaEn(const tablero &t, coordenada c);
