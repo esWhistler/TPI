@@ -76,10 +76,10 @@ jugador jugadorEn(tablero t, coordenada c){
 
 bool sinPeonesNoCoronados(tablero t){
     bool res = true;
-    for (int i = 0; i < 8 && res; ++i) {
+    for (int i = 0; i < ANCHO_TABLERO && res; ++i) {
         res &= piezaEn(t, setCoord(0, i)) != PEON;
     }
-    for (int i = 0; i < 8 && res; ++i) {
+    for (int i = 0; i < ANCHO_TABLERO && res; ++i) {
         res &= piezaEn(t, setCoord(7, i)) != PEON;
     }
     return res;
@@ -115,4 +115,17 @@ int aparicionesEnTablero(tablero t, casilla p){
         }
     }
     return apariciones;
+}
+
+tablero tableroInicial(){
+    return {
+            {cTORRE_N, cVACIA, cALFIL_N, cVACIA, cREY_N, cALFIL_N, cVACIA, cTORRE_N},
+            {cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cPEON_B, cPEON_B, cPEON_B, cPEON_B, cPEON_B, cPEON_B, cPEON_B, cPEON_B},
+            {cTORRE_B, cVACIA, cALFIL_B, cVACIA, cREY_B, cALFIL_B, cVACIA, cTORRE_B},
+    };
 }

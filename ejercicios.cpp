@@ -8,9 +8,10 @@ bool posicionValida ( posicion const &p ) {
 
 // EJERCICIO 2
 bool posicionInicial ( posicion const &p ) {
-    bool resp = false;
-    // completar codigo
-    return resp;
+    //assert(posicionValida(p));
+    tablero tabInicial = tableroInicial();
+    posicion posInicial = make_pair(tabInicial, BLANCO);
+    return posInicial == p;
 }
 // EJERCICIO 3
 vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {

@@ -40,6 +40,7 @@ bool cantidadPeonesValidos(tablero t);
 bool cantidadReyesValidos(tablero t);
 bool cantidadAlfilesValidos(tablero t);
 bool cantidadTorresValidas(tablero t);
+tablero tableroInicial();
 
 
 #endif //AJEDREZLITE_AUXILIARES_H
