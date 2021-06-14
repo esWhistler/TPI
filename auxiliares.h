@@ -15,9 +15,6 @@ tablero inicializarTablero();
 coordenada setCoord(int i, int j);
 tablero tableroActual (const posicion &p );
 
-//Ejercicios
-
-
 //5.2.1. Auxiliares
 int aparicionesEnTablero(const tablero &t, casilla p);
 int colorPieza(const tablero &t, coordenada c);
@@ -27,7 +24,7 @@ int piezaEn(const tablero &t, coordenada c);
 int jugadorEn(const tablero &t, coordenada c);
 casilla setCasilla(pieza p, jugador j);
 
-//5.2.2. Predicados
+//Ej1
 bool esJugadorValido(jugador j);
 bool esTableroValido(const tablero &t);
 bool casillasValidas(const tablero &t);
@@ -40,7 +37,11 @@ bool cantidadPeonesValidos(const tablero &t);
 bool cantidadReyesValidos(const tablero &t);
 bool cantidadAlfilesValidos(const tablero &t);
 bool cantidadTorresValidas(const tablero &t);
+
+//Ej2
 tablero tableroInicial();
+
+//Ej3
 bool casillaAtacada(coordenada c, const tablero &t, jugador j);
 bool ataca(const tablero &t, casilla c, casilla d);
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d);
@@ -51,5 +52,13 @@ bool movimientoValidoTorre(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoRey(coordenada c, coordenada d);
 bool capturaPeonValida(const tablero &t, coordenada c, coordenada d);
 casilla casillaEn(const tablero &t, coordenada c);
+
+//Ej4
+bool jugadaValida(const tablero &t1, const tablero &t2, coordenada o, coordenada d);
+bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d);
+
+//Ej5
+void ordenarVector(vector<casilla> &v);
+void modificarFilaPor(tablero &t, int i, vector<casilla> filaNueva);
 
 #endif //AJEDREZLITE_AUXILIARES_H
