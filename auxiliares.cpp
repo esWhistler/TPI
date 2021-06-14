@@ -162,8 +162,8 @@ bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d){
 
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
     return (c.second == d.second) &&
-           ((j == BLANCO && c.first == d.first - 1) ||
-            (j == NEGRO && c.first == d.first + 1));
+           ((j == BLANCO && c.first == d.first + 1) ||
+            (j == NEGRO && c.first == d.first - 1));
 }
 
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d){
@@ -230,4 +230,39 @@ bool capturaPeonValida(const tablero &t, coordenada c, coordenada d){
 
 casilla casillaEn(const tablero &t, coordenada c){
     return t[c.first][c.second];
+}
+
+bool jugadaValida(const tablero &t1, const tablero &t2, coordenada o, coordenada d){
+    pieza piezaMovida = piezaEn(t1, o);
+    pieza piezaDestino = piezaEn(t2, d);
+
+    return (piezaMovida == piezaDestino && movimientoPiezaValido(t1, o, d)) ||
+    (piezaMovida == PEON && piezaDestino == TORRE && esMovDePeonCoronado(t1, o, d));
+}
+
+bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d){
+    return ((jugadorEn(t, o) == BLANCO && o.first == 1 && d.first == 0) ||
+            (jugadorEn(t, o) == NEGRO && o.first == 6 && d.first == 7)) &&
+            (movimientoValidoPeon(jugadorEn(t, o), o, d) || capturaPeonValida(t, o, d));
+}
+
+void ordenarVector(vector<casilla> &v){
+    int n = v.size();
+    for (int i = 0; i < n - 1; ++i) {
+        int indiceDelMenor = i;
+        for (int j = i + 1; j < n; ++j) {
+            if(v[j].first < v[indiceDelMenor].first) indiceDelMenor = j;
+        }
+        swap(v[i], v[indiceDelMenor]);
+    }
+}
+
+void modificarFilaPor(tablero &t, int i, vector<casilla> filaNueva){
+    int k = 0;
+    for (int j = 0; j < ANCHO_TABLERO; ++j) {
+        if(t[i][j] != cVACIA){
+            t[i][j] = filaNueva[k];
+            k++;
+        }
+    }
 }

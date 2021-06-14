@@ -31,15 +31,47 @@ vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
 
 // EJERCICIO 4
 bool posicionSiguienteCorrecta ( posicion const &p1, posicion const &p2, coordenada o, coordenada d ) {
-    bool resp = false;
-    // completar codigo
+    jugador j1 = p1.second;
+    jugador j2 = p2.second;
+
+    tablero t1 = p1.first;
+    tablero t2 = p2.first;
+
+    bool resp = j1 != j2;
+
+    for (int i = 0; i < ANCHO_TABLERO && resp; ++i) {
+        for (int j = 0; j < ANCHO_TABLERO && resp; ++j) {
+            coordenada coord = setCoord(i, j);
+            if(coord != o && coord != d){
+                resp &= casillaEn(t1, coord) == casillaEn(t2, coord);
+            }
+        }
+    }
+
+    resp &= jugadorEn(t1, o) == j1;
+    resp &= jugadorEn(t1, d) != j1;
+    resp &= casillaEn(t2, o) == cVACIA;
+    resp &= jugadorEn(t2, d) == j1;
+    resp &= jugadaValida(t1, t2, o, d);
+
     return resp;
 }
 // EJERCICIO 5
 void ordenarTablero ( posicion &p ) {
-    // completar codigo
+    tablero &t = p.first;
+    for (int i = 0; i < ANCHO_TABLERO; ++i) {
+        vector<casilla> piezasEnFila;
+        for (int j = 0; j < ANCHO_TABLERO; ++j) {
+            if(t[i][j] != cVACIA){
+                piezasEnFila.push_back(t[i][j]);
+            }
+        }
+        ordenarVector(piezasEnFila);
+        modificarFilaPor(t, i, piezasEnFila);
+    }
     return;
 }
+
 // EJERCICIO 6
 bool finDeLaPartida ( posicion const &p, int &j ) {
     bool resp = false;
