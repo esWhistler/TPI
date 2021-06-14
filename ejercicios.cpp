@@ -57,20 +57,21 @@ bool posicionSiguienteCorrecta ( posicion const &p1, posicion const &p2, coorden
     return resp;
 }
 // EJERCICIO 5
-void ordenarTablero ( posicion &p ) {
+void ordenarTablero ( posicion &p ){
     tablero &t = p.first;
-    for (int i = 0; i < ANCHO_TABLERO; ++i) {
-        vector<casilla> piezasEnFila;
-        for (int j = 0; j < ANCHO_TABLERO; ++j) {
-            if(t[i][j] != cVACIA){
-                piezasEnFila.push_back(t[i][j]);
+    int n = t.size();
+    for (int fila = 0; fila < ANCHO_TABLERO; ++fila) {
+        for (int i = 0; i < n - 1; ++i) {
+            int min_pos = i;
+            for (int j = i + 1; j < n; ++j) {
+                if(t[fila][j].first < t[fila][min_pos].first && t[fila][j] != cVACIA) min_pos = j;
             }
+            swap(t[fila][min_pos], t[fila][i]);
         }
-        ordenarVector(piezasEnFila);
-        modificarFilaPor(t, i, piezasEnFila);
     }
-    return;
+
 }
+
 
 // EJERCICIO 6
 bool finDeLaPartida ( posicion const &p, int &j ) {

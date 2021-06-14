@@ -245,24 +245,3 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d){
             (jugadorEn(t, o) == NEGRO && o.first == 6 && d.first == 7)) &&
             (movimientoValidoPeon(jugadorEn(t, o), o, d) || capturaPeonValida(t, o, d));
 }
-
-void ordenarVector(vector<casilla> &v){
-    int n = v.size();
-    for (int i = 0; i < n - 1; ++i) {
-        int indiceDelMenor = i;
-        for (int j = i + 1; j < n; ++j) {
-            if(v[j].first < v[indiceDelMenor].first) indiceDelMenor = j;
-        }
-        swap(v[i], v[indiceDelMenor]);
-    }
-}
-
-void modificarFilaPor(tablero &t, int i, vector<casilla> filaNueva){
-    int k = 0;
-    for (int j = 0; j < ANCHO_TABLERO; ++j) {
-        if(t[i][j] != cVACIA){
-            t[i][j] = filaNueva[k];
-            k++;
-        }
-    }
-}
