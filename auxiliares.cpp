@@ -146,7 +146,7 @@ bool casillaAtacada(casilla c, const tablero &t, jugador j){
 bool ataca(const tablero &t, casilla c, casilla d){
     return (c != cVACIA) &&
            ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
-            (piezaEn(t, c) == PEON && capturaPeonValida(t, jugadorEn(t, c), c, d)));
+            (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
 }
 
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d){
@@ -157,9 +157,9 @@ bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d){
 }
 
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
-    return (c.first == d.first) &&
-           ((j == BLANCO && c.second == d.second - 1) ||
-            (j == NEGRO && c.second == d.second + 1));
+    return (c.second == d.second) &&
+           ((j == BLANCO && c.first == d.first - 1) ||
+            (j == NEGRO && c.first == d.first + 1));
 }
 
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d){
@@ -171,7 +171,6 @@ bool noHayBloqueoAlfil(const tablero &t, casilla c, casilla d){
     int i = min(c.first, d.first);
     int hastai = max(c.first, d.first);
     int j = min(c.second, d.second);
-    int hastaj = max(c.second, d.second);
 
     while (i < hastai && !res) {
         res &= esCasillaVacia(casillaEn(t, setCoord(i, j)));
@@ -219,8 +218,10 @@ bool movimientoValidoRey(coordenada c, coordenada d){
     return (abs(a - j) == 0 && abs(b - k) == 1) || (abs(a - j) == 1 && abs(b - k) == 1) || (abs(a - j) == 1 && abs(b - k) == 0);
 }
 
-bool capturaPeonValida(const tablero &t, jugador j, coordenada c, coordenada d){
-    return (jugadorEn(t, c) == BLANCO && c.second == d.second - 1) || (jugadorEn(t, c) == NEGRO && c.second == d.second +1);
+bool capturaPeonValida(const tablero &t, coordenada c, coordenada d){
+    return abs(c.first - d.first) == 1 &&
+            (jugadorEn(t, c) == BLANCO && c.second == d.second - 1) ||
+            (jugadorEn(t, c) == NEGRO && c.second == d.second + 1);
 }
 
 casilla casillaEn(const tablero &t, coordenada c){
