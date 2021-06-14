@@ -28,6 +28,10 @@ tablero inicializarTablero(){
     return out;
 }
 
+jugador contrincante(jugador j){
+    return (j == 1 ? 2 : 1);
+}
+
 
 bool esJugadorValido(jugador j){
     return j == NEGRO || j == BLANCO;
@@ -244,4 +248,107 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d){
     return ((jugadorEn(t, o) == BLANCO && o.first == 1 && d.first == 0) ||
             (jugadorEn(t, o) == NEGRO && o.first == 6 && d.first == 7)) &&
             (movimientoValidoPeon(jugadorEn(t, o), o, d) || capturaPeonValida(t, o, d));
+}
+
+bool capturaValida(const tablero &t, coordenada c, coordenada d){
+    return (contrincante(piezaEn(t, c)) == piezaEn(t, d)) &&
+        ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
+        (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
+}
+
+bool hayJaque(const posicion &p){
+    tablero const &t = p.first;
+    coordenada coordDelRey = coordenadaDelReyDeTurno(p);
+    bool res = false;
+    for (int i = 0; i < ANCHO_TABLERO && !res; ++i) {
+        for (int j = 0; j < ANCHO_TABLERO && !res; ++j) {
+            coordenada potencialAtacante = setCoord(i, j);
+            res &= capturaValida(t, potencialAtacante, coordDelRey);
+        }
+    }
+    return res;
+}
+
+bool hayJaqueMate(const posicion &p){
+    return hayJaque(p) && !reyPuedeMoverse(p) && !esJaqueMultiple(p)
+    // esJaqueMultiple existe porque si mas de una pieza da jaque a la vez nunca se puede bloquear o comer ambas, asi que habria que mover el rey, pero ya vimos que no es posible
+    && !sePuedeBloquear(p) && !sePuedeComer(p);
+}
+
+bool reyPuedeMoverse(const posicion &p){
+    vector<coordenada> movimientosDelRey = movimientosRey(p);
+}
+
+vector<coordenada> movimientosRey(const posicion &p){
+    vector<coordenada> movimientos;
+
+    coordenada coordenadaRey = coordenadaDelReyDeTurno(p);
+    int reyI = coordenadaRey.first;
+    int reyJ = coordenadaRey.second;
+
+    tablero const &t = p.first;
+    jugador j = p.second;
+
+    for (int i = reyI - 1; i <= reyI + 1; ++i) {
+        for (int j = reyJ - 1; j <= reyJ + 1; ++j) {
+            coordenada c = setCoord(i, j);
+            if(coordenadaValida(c) && !estaAtacadaPorJ(t, c, contrincante(j)) && jugadorEn(t, c) != j) movimientos.push_back(c);
+        }
+    }
+    return movimientos;
+}
+
+bool coordenadaValida(coordenada c){
+    return 0 <= c.first && c.first < ANCHO_TABLERO && 0 <= c.second && c.second < ANCHO_TABLERO;
+}
+
+bool estaAtacadaPorJ(const tablero &t, coordenada c, jugador j){
+    bool estaAtacada = false;
+
+    for (int i = 0; i < ANCHO_TABLERO && !estaAtacada; ++i) {
+        for (int k = 0; k < ANCHO_TABLERO && !estaAtacada; ++k) {
+            coordenada potencialAtacante = setCoord(i, k);
+            if(jugadorEn(t, potencialAtacante) == j){
+                estaAtacada &= capturaValida(t, potencialAtacante, c);
+            }
+        }
+    }
+
+    return estaAtacada;
+}
+
+bool sePuedeBloquear(const posicion &p){
+    coordenada coordRey = coordenadaDelReyDeTurno(p);
+    vector<casilla> casillasEntreAtacanteYRey = casillasEntre(coordRey, coordDelAtacanteDe(p, coordRey));
+    int cantCasillasEntre = casillasEntreAtacanteYRey.size();
+    tablero const &t = p.first;
+    jugador j = p.second;
+
+    bool res = false;
+
+    for (int i = 0; i < cantCasillasEntre && !res; ++i) {
+        res |= estaAtacadaPorJ(t, casillasEntreAtacanteYRey[i], j);
+    }
+
+    return res;
+}
+
+coordenada coordenadaDelReyDeTurno(const posicion &p){
+    coordenada coordRey;
+    tablero const &t = p.first;
+    jugador const &j = p.second;
+    bool encontreLaCoordenada = false;
+    for (int i = 0; i < ANCHO_TABLERO && !encontreLaCoordenada; ++i) {
+        for (int j = 0; j < ANCHO_TABLERO && !encontreLaCoordenada; ++j) {
+            if((t[i][j] == cREY_N && j == 2) || (t[i][j] == cREY_B && j == 1)) {
+                coordRey = setCoord(i, j);
+                encontreLaCoordenada = true;
+            }
+        }
+    }
+    return coordRey;
+}
+
+secuencia movimientosDelJugador(const posicion &p, jugador j){
+
 }

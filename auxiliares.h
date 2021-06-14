@@ -7,6 +7,11 @@
 #include "definiciones.h"
 
 using namespace std;
+
+//DEFINICIONES DE TIPO
+typedef int jugador;
+typedef int pieza;
+
 // definir aqui las funciones
 pair<int,int> mp(int a, int b);
 
@@ -57,8 +62,15 @@ casilla casillaEn(const tablero &t, coordenada c);
 bool jugadaValida(const tablero &t1, const tablero &t2, coordenada o, coordenada d);
 bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d);
 
-//Ej5
-void ordenarVector(vector<casilla> &v);
-void modificarFilaPor(tablero &t, int i, vector<casilla> filaNueva);
+//Ej6
+bool capturaValida(const tablero &t, coordenada c, coordenada d);
+bool hayJaque(const posicion &p);
+bool hayJaqueMate(const posicion &p);
+bool reyPuedeMoverse(const posicion &p);
+vector<coordenada> movimientosRey(const posicion &p);
+bool coordenadaValida(coordenada c);
+bool estaAtacadaPorJ(const tablero &t, coordenada c, jugador j);
+bool sePuedeBloquear(const posicion &p);
+coordenada coordenadaDelReyDeTurno(const posicion &p);
 
 #endif //AJEDREZLITE_AUXILIARES_H

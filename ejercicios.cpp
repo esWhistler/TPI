@@ -8,7 +8,6 @@ bool posicionValida ( posicion const &p ) {
 
 // EJERCICIO 2
 bool posicionInicial ( posicion const &p ) {
-    //assert(posicionValida(p));
     tablero tabInicial = tableroInicial();
     posicion posInicial = make_pair(tabInicial, BLANCO);
     return posInicial == p;
@@ -69,7 +68,6 @@ void ordenarTablero ( posicion &p ){
             swap(t[fila][min_pos], t[fila][i]);
         }
     }
-
 }
 
 
