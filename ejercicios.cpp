@@ -12,8 +12,8 @@ bool posicionInicial ( posicion const &p ) {
     posicion posInicial = make_pair(tabInicial, BLANCO);
     return posInicial == p;
 }
+
 // EJERCICIO 3
-// todo: a revisar si hay tiempo
 vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
     tablero tablero = p.first;
     vector<coordenada> cA;
@@ -27,7 +27,6 @@ vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
     }
     return cA;
 }
-
 
 // EJERCICIO 4
 bool posicionSiguienteCorrecta ( posicion const &p1, posicion const &p2, coordenada o, coordenada d ) {
@@ -72,24 +71,26 @@ void ordenarTablero ( posicion &p ) {
     }
 }
 
-
 // EJERCICIO 6
 bool finDeLaPartida ( posicion const &p, int &j ) {
     bool resp = false;
     // completar codigo
     return resp;
 }
+
 // EJERCICIO 7
 bool hayJaqueDescubierto ( posicion const &p ) {
     bool resp = false;
     // completar codigo
     return resp;
 }
+
 // EJERCICIO 8
 void ejecutarSecuenciaForzada ( posicion &p, secuencia s ) {
     // completar codigo
     return;
 }
+
 // EJERCICIO 9
 int seVieneElJaqueEn ( posicion const & p ) {
     int resp = -1;
