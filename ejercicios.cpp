@@ -14,6 +14,7 @@ bool posicionInicial ( posicion const &p ) {
     return posInicial == p;
 }
 // EJERCICIO 3
+// a revisar si hay tiempo
 vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
     tablero tablero = p.first;
     vector<coordenada> cA;
