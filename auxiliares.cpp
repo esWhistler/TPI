@@ -74,6 +74,10 @@ jugador jugadorEn(const tablero &t, coordenada c){
     return t[c.first][c.second].second;
 }
 
+casilla setCasilla(pieza p, jugador j){
+    return make_pair(p, j);
+}
+
 bool sinPeonesNoCoronados(const tablero &t){
     bool res = true;
     for (int i = 0; i < ANCHO_TABLERO && res; ++i) {
@@ -130,20 +134,20 @@ tablero tableroInicial(){
     };
 }
 
-bool casillaAtacada(casilla c, const tablero &t, jugador j){
+bool casillaAtacada(coordenada c, const tablero &t, jugador j){
     bool estaAtacada = false;
-    for (int i = 0; i < ANCHO_TABLERO; ++i) {
-        for (int k = 0; k < ANCHO_TABLERO; ++k) {
+    for (int i = 0; i < ANCHO_TABLERO && !estaAtacada; ++i) {
+        for (int k = 0; k < ANCHO_TABLERO && !estaAtacada; ++k) {
             coordenada target = setCoord(i, k);
             if((target != c) && (jugadorEn(t, target) == j)){
-                estaAtacada |= ataca(t, setCoord(i, k), c);
+                estaAtacada |= ataca(t, target, c); //(4,5) (3, 4)
             }
         }
     }
     return estaAtacada;
 }
 
-bool ataca(const tablero &t, casilla c, casilla d){
+bool ataca(const tablero &t, coordenada c, coordenada d){
     return (c != cVACIA) &&
            ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
             (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
@@ -166,7 +170,7 @@ bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d){
     return abs(c.first - d.first) == abs(c.second - d.second) && noHayBloqueoAlfil(t, c, d);
 }
 
-bool noHayBloqueoAlfil(const tablero &t, casilla c, casilla d){
+bool noHayBloqueoAlfil(const tablero &t, coordenada c, coordenada d){
     bool res = false;
     int i = min(c.first, d.first);
     int hastai = max(c.first, d.first);
@@ -219,9 +223,9 @@ bool movimientoValidoRey(coordenada c, coordenada d){
 }
 
 bool capturaPeonValida(const tablero &t, coordenada c, coordenada d){
-    return abs(c.first - d.first) == 1 &&
-            (jugadorEn(t, c) == BLANCO && c.second == d.second - 1) ||
-            (jugadorEn(t, c) == NEGRO && c.second == d.second + 1);
+    return abs(c.second - d.second) == 1 && //(4,5) (3, 4)
+        ((jugadorEn(t, c) == BLANCO && c.first == d.first + 1) ||
+        (jugadorEn(t, c) == NEGRO && c.first == d.first - 1));
 }
 
 casilla casillaEn(const tablero &t, coordenada c){
