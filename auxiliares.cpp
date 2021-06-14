@@ -171,21 +171,31 @@ bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
 }
 
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d){
-    return abs(c.first - d.first) == abs(c.second - d.second) && noHayBloqueoAlfil(t, c, d);
+    return abs(c.first - d.first) == abs(c.second - d.second) && !hayBloqueoAlfil(t, c, d);
 }
 
-bool noHayBloqueoAlfil(const tablero &t, coordenada c, coordenada d){
-    bool res = false;
-    int i = min(c.first, d.first);
-    int hastai = max(c.first, d.first);
-    int j = min(c.second, d.second);
+bool hayBloqueoAlfil(const tablero &t, coordenada c, coordenada d){
+    bool hayBloqueo = false;
 
-    while (i < hastai && !res) {
-        res &= esCasillaVacia(casillaEn(t, setCoord(i, j)));
-        i++;
-        j++;
+    int desdei = c.first;
+    int desdej = c.second;
+
+    int hastai = d.first;
+    int hastaj = d.second;
+
+    int modi = (desdei - hastai > 0 ? -1 : +1);
+    int modj = (desdej - hastaj > 0 ? -1 : +1);
+
+    desdei += modi;
+    desdej += modj;
+
+    while(desdei != hastai && !hayBloqueo) {
+        hayBloqueo |= t[desdei][desdej] != cVACIA;
+        desdei += modi;
+        desdej += modj;
     }
-    return res;
+
+    return hayBloqueo;
 }
 
 bool movimientoValidoTorre(const tablero &t, coordenada c, coordenada d){
@@ -269,11 +279,11 @@ bool hayJaque(const posicion &p){
     return res;
 }
 
-bool hayJaqueMate(const posicion &p){
+/*bool hayJaqueMate(const posicion &p){
     return hayJaque(p) && !reyPuedeMoverse(p) && !esJaqueMultiple(p)
     // esJaqueMultiple existe porque si mas de una pieza da jaque a la vez nunca se puede bloquear o comer ambas, asi que habria que mover el rey, pero ya vimos que no es posible
     && !sePuedeBloquear(p) && !sePuedeComer(p);
-}
+}*/
 
 bool reyPuedeMoverse(const posicion &p){
     vector<coordenada> movimientosDelRey = movimientosRey(p);
@@ -317,7 +327,7 @@ bool estaAtacadaPorJ(const tablero &t, coordenada c, jugador j){
     return estaAtacada;
 }
 
-bool sePuedeBloquear(const posicion &p){
+/*bool sePuedeBloquear(const posicion &p){
     coordenada coordRey = coordenadaDelReyDeTurno(p);
     vector<casilla> casillasEntreAtacanteYRey = casillasEntre(coordRey, coordDelAtacanteDe(p, coordRey));
     int cantCasillasEntre = casillasEntreAtacanteYRey.size();
@@ -331,7 +341,7 @@ bool sePuedeBloquear(const posicion &p){
     }
 
     return res;
-}
+}*/
 
 coordenada coordenadaDelReyDeTurno(const posicion &p){
     coordenada coordRey;

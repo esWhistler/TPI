@@ -52,7 +52,7 @@ bool ataca(const tablero &t, casilla c, casilla d);
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d);
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d);
-bool noHayBloqueoAlfil(const tablero &t, casilla c, casilla d);
+bool hayBloqueoAlfil(const tablero &t, casilla c, casilla d);
 bool movimientoValidoTorre(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoRey(coordenada c, coordenada d);
 bool capturaPeonValida(const tablero &t, coordenada c, coordenada d);

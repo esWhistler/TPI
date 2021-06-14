@@ -19,8 +19,9 @@ vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
     vector<coordenada> cA;
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
-            if(casillaAtacada(setCoord(i, k), tablero, j)){
-                cA.push_back(setCoord(i, k));
+            coordenada c = setCoord(i, k);
+            if(casillaAtacada(c, tablero, j)){
+                cA.push_back(c);
             }
         }
     }
