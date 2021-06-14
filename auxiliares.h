@@ -25,7 +25,7 @@ jugador contrincante(jugador j);
 jugador jugadorDeTurno(posicion p);
 int piezaEn(const tablero &t, coordenada c);
 int jugadorEn(const tablero &t, coordenada c);
-casilla setCasilla(int, int);
+casilla setCasilla(pieza p, jugador j);
 
 //5.2.2. Predicados
 bool esJugadorValido(jugador j);
@@ -41,7 +41,7 @@ bool cantidadReyesValidos(const tablero &t);
 bool cantidadAlfilesValidos(const tablero &t);
 bool cantidadTorresValidas(const tablero &t);
 tablero tableroInicial();
-bool casillaAtacada(casilla c, const tablero &t, jugador j);
+bool casillaAtacada(coordenada c, const tablero &t, jugador j);
 bool ataca(const tablero &t, casilla c, casilla d);
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d);
@@ -49,7 +49,7 @@ bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d);
 bool noHayBloqueoAlfil(const tablero &t, casilla c, casilla d);
 bool movimientoValidoTorre(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoRey(coordenada c, coordenada d);
-bool capturaPeonValida(const tablero &t, jugador j, coordenada c, coordenada d);
+bool capturaPeonValida(const tablero &t, coordenada c, coordenada d);
 casilla casillaEn(const tablero &t, coordenada c);
 
 #endif //AJEDREZLITE_AUXILIARES_H
