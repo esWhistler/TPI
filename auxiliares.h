@@ -27,7 +27,6 @@ jugador contrincante(jugador j);
 jugador jugadorDeTurno(posicion p);
 int piezaEn(const tablero &t, coordenada c);
 int jugadorEn(const tablero &t, coordenada c);
-casilla setCasilla(pieza p, jugador j);
 
 //Ej1
 bool esJugadorValido(jugador j);

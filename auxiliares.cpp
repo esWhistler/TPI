@@ -78,10 +78,6 @@ jugador jugadorEn(const tablero &t, coordenada c){
     return t[c.first][c.second].second;
 }
 
-casilla setCasilla(pieza p, jugador j){
-    return make_pair(p, j);
-}
-
 bool sinPeonesNoCoronados(const tablero &t){
     bool res = true;
     for (int i = 0; i < ANCHO_TABLERO && res; ++i) {
