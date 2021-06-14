@@ -56,8 +56,9 @@ bool posicionSiguienteCorrecta ( posicion const &p1, posicion const &p2, coorden
 
     return resp;
 }
+
 // EJERCICIO 5
-void ordenarTablero ( posicion &p ){
+void ordenarTablero ( posicion &p ) {
     tablero &t = p.first;
     int n = t.size();
     for (int fila = 0; fila < ANCHO_TABLERO; ++fila) {

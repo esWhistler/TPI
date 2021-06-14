@@ -7,13 +7,13 @@
 using namespace std;
 
 
-TEST(posicionValidaTEST, tableroVacio){
+TEST(posicionValidaTEST, tableroVacio) {
     tablero t = {{}};
     posicion p = make_pair(t,1);
     EXPECT_FALSE(posicionValida(p));
 }
 
-TEST(posicionValidaTEST, tableroSinPiezas){
+TEST(posicionValidaTEST, tableroSinPiezas) {
     tablero t = {
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
@@ -28,7 +28,7 @@ TEST(posicionValidaTEST, tableroSinPiezas){
     EXPECT_FALSE(posicionValida(p));
 }
 
-TEST(posicionValidaTEST, tableroSoloReyes){
+TEST(posicionValidaTEST, tableroSoloReyes) {
     tablero t = {
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
@@ -43,7 +43,7 @@ TEST(posicionValidaTEST, tableroSoloReyes){
     EXPECT_TRUE(posicionValida(p));
 }
 
-TEST(posicionValidaTEST, posicionInicial){
+TEST(posicionValidaTEST, posicionInicial) {
     tablero t = {
             {cTORRE_N, cVACIA, cALFIL_N, cVACIA, cREY_N, cALFIL_N, cVACIA, cTORRE_N},
             {cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N, cPEON_N},
@@ -58,7 +58,7 @@ TEST(posicionValidaTEST, posicionInicial){
     EXPECT_TRUE(posicionValida(p));
 }
 
-TEST(posicionValidaTEST, peonesConvertidos){
+TEST(posicionValidaTEST, peonesConvertidos) {
     tablero t = {
             {cVACIA, cVACIA, cALFIL_N, cVACIA, cVACIA, cTORRE_B, cVACIA, cVACIA},
             {cPEON_N, cREY_N, cPEON_N, cVACIA, cVACIA, cVACIA, cPEON_N, cPEON_N},
@@ -73,7 +73,7 @@ TEST(posicionValidaTEST, peonesConvertidos){
     EXPECT_TRUE(posicionValida(p));
 }
 
-TEST(posicionValidaTEST, torresDeSobra){
+TEST(posicionValidaTEST, torresDeSobra) {
     tablero t = {
             {cVACIA, cVACIA, cALFIL_N, cVACIA, cVACIA, cTORRE_B, cVACIA, cVACIA},
             {cPEON_N, cREY_N, cPEON_N, cVACIA, cVACIA, cVACIA, cPEON_N, cPEON_N},

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-TEST(posicionSiguienteCorrectaTEST, adelantoPeon){
+TEST(posicionSiguienteCorrectaTEST, adelantoPeon) {
     tablero t_p = {
             {cTORRE_N,  cVACIA,     cALFIL_N,   cVACIA,     cREY_N,     cALFIL_N,   cVACIA,     cTORRE_N},
             {cPEON_N,   cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N},
@@ -38,7 +38,7 @@ TEST(posicionSiguienteCorrectaTEST, adelantoPeon){
     EXPECT_TRUE(posicionSiguienteCorrecta(p,q,o,d));
 }
 
-TEST(posicionSiguienteCorrectaTEST, peonHaceSaltoDelTigre){
+TEST(posicionSiguienteCorrectaTEST, peonHaceSaltoDelTigre) {
     tablero t_p = {
             {cTORRE_N,  cVACIA,     cALFIL_N,   cVACIA,     cREY_N,     cALFIL_N,   cVACIA,     cTORRE_N},
             {cPEON_N,   cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N},
@@ -70,7 +70,7 @@ TEST(posicionSiguienteCorrectaTEST, peonHaceSaltoDelTigre){
     EXPECT_FALSE(posicionSiguienteCorrecta(p,q,o,d));
 }
 
-TEST(posicionSiguienteCorrectaTEST, peonConvierte){
+TEST(posicionSiguienteCorrectaTEST, peonConvierte) {
     tablero t_p = {
             {cTORRE_N,  cVACIA,     cVACIA,   cVACIA,     cREY_N,     cALFIL_N,   cVACIA,     cTORRE_N},
             {cPEON_N,   cPEON_N,    cPEON_B,    cVACIA,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N},

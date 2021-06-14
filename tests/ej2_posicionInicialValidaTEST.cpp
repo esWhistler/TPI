@@ -5,7 +5,7 @@
 
 using namespace std;
 
-TEST(posicionInicialValidaTEST, tableroCorrecto){
+TEST(posicionInicialValidaTEST, tableroCorrecto) {
     tablero t = {
     {cTORRE_N,  cVACIA,     cALFIL_N,   cVACIA,     cREY_N,     cALFIL_N,   cVACIA,     cTORRE_N},
     {cPEON_N,   cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N},
@@ -20,7 +20,7 @@ TEST(posicionInicialValidaTEST, tableroCorrecto){
     EXPECT_TRUE(posicionInicial(p));
 }
 
-TEST(posicionInicialValidaTEST, tableroInCorrecto){
+TEST(posicionInicialValidaTEST, tableroInCorrecto) {
     tablero t = {
             {cTORRE_N,  cVACIA,     cALFIL_N,   cVACIA,     cREY_N,     cALFIL_N,   cVACIA,     cTORRE_N},
             {cPEON_N,   cPEON_N,    cVACIA,     cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N},
@@ -35,7 +35,7 @@ TEST(posicionInicialValidaTEST, tableroInCorrecto){
     EXPECT_FALSE(posicionInicial(p));
 }
 
-TEST(posicionInicialValidaTEST, jugadorNegro){
+TEST(posicionInicialValidaTEST, jugadorNegro) {
     tablero t = {
             {cTORRE_N,  cVACIA,     cALFIL_N,   cVACIA,     cREY_N,     cALFIL_N,   cVACIA,     cTORRE_N},
             {cPEON_N,   cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N,    cPEON_N},
