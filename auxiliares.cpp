@@ -175,7 +175,7 @@ bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d) {
 
 bool hayBloqueoAlfil(const tablero &t, coordenada c, coordenada d) {
     assert(c != d); // Importante por potencial segfault;
-    
+
     bool hayBloqueo = false;
 
     int desdei = c.first;

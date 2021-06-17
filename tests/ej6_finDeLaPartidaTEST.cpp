@@ -17,8 +17,8 @@ TEST(finDeLaPartidaTEST, partidaNoFinalizada) { // Tablero inicial
             {cPEON_B,   cPEON_B,    cPEON_B,    cPEON_B,    cPEON_B,    cPEON_B,    cPEON_B,    cPEON_B},
             {cTORRE_B,  cVACIA,     cALFIL_B,   cVACIA,     cREY_B,     cALFIL_B,   cVACIA,     cTORRE_B},
     };
-    posicion p = make_pair(t,BLANCO);
-    int j;
+    posicion p = make_pair(t, BLANCO);
+    int j = -1;
 
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
@@ -34,8 +34,8 @@ TEST(finDeLaPartidaTEST, jaqueMate) { // Figura 4a del enunciado del TPE
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
     EXPECT_EQ(j, BLANCO);
@@ -52,8 +52,8 @@ TEST(finDeLaPartidaTEST, soloReyes) {
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
     EXPECT_EQ(j, VACIO);
@@ -70,8 +70,8 @@ TEST(finDeLaPartidaTEST, reyAhogado) { // Rey ahogado por torre blanca en (5, 6)
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
     EXPECT_EQ(j, VACIO);
@@ -88,8 +88,8 @@ TEST(finDeLaPartidaTEST, jaqueMultiple) { // Jaque múltiple por torre blanca en
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
     EXPECT_EQ(j, BLANCO);
@@ -106,8 +106,8 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeBloquear) { // Jaque de torre blanca en (0,
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
@@ -123,8 +123,8 @@ TEST(finDeLaPartidaTEST, jaqueMultipleSePuedeComer) { // Jaque múltiple por tor
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
@@ -140,8 +140,8 @@ TEST(finDeLaPartidaTEST, jaqueMultipleNoSePuedeComer) { // Jaque múltiple por t
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cTORRE_B, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
     EXPECT_EQ(j, BLANCO);
@@ -158,8 +158,8 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeComer) { // Jaque por torre blanca en (4, 5
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
@@ -175,8 +175,8 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeBloquearPorPeon) { // Jaque por alfil blanc
             {cVACIA, cPEON_N, cALFIL_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
@@ -192,8 +192,8 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeComerPorPeon) { // Jaque por alfil blanco e
             {cVACIA, cVACIA, cALFIL_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
@@ -209,8 +209,8 @@ TEST(finDeLaPartidaTEST, jaqueMatePiezaPineada) { // Jaque mate por torre blanca
             {cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cTORRE_B},
     };
-    posicion p = make_pair(t,NEGRO);
-    int j;
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
     EXPECT_EQ(j, BLANCO);
