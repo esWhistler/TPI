@@ -56,7 +56,7 @@ TEST(finDeLaPartidaTEST, reyAhogado) { // Rey ahogado por torre blanca en (5, 6)
     int j;
 
     EXPECT_TRUE(finDeLaPartida(p,j));
-    EXPECT_EQ(j, BLANCO);
+    EXPECT_EQ(j, VACIO);
 }
 
 TEST(finDeLaPartidaTEST, jaqueMultiple) { // Jaque múltiple por torre blanca en (0, 4) y alfil blanco en (5, 2)
@@ -91,8 +91,7 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeBloquear) { // Jaque de torre blanca en (0,
     posicion p = make_pair(t,NEGRO);
     int j;
 
-    EXPECT_TRUE(finDeLaPartida(p,j));
-    EXPECT_EQ(j, BLANCO);
+    EXPECT_FALSE(finDeLaPartida(p,j));
 }
 
 TEST(finDeLaPartidaTEST, jaqueMultipleSePuedeComer) { // Jaque múltiple por torre blanca en (5, 5) y peón blanco en (1, 6). Rey puede comer peón.
@@ -109,8 +108,7 @@ TEST(finDeLaPartidaTEST, jaqueMultipleSePuedeComer) { // Jaque múltiple por tor
     posicion p = make_pair(t,NEGRO);
     int j;
 
-    EXPECT_TRUE(finDeLaPartida(p,j));
-    EXPECT_EQ(j, BLANCO);
+    EXPECT_FALSE(finDeLaPartida(p,j));
 }
 
 TEST(finDeLaPartidaTEST, jaqueMultipleNoSePuedeComer) { // Jaque múltiple por torre blanca en (5, 5) y peón blanco en (1, 6). Rey no puede comer peón.
@@ -145,6 +143,5 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeComer) { // Jaque por torre blanca en (4, 5
     posicion p = make_pair(t,NEGRO);
     int j;
 
-    EXPECT_TRUE(finDeLaPartida(p,j));
-    EXPECT_EQ(j, BLANCO);
+    EXPECT_FALSE(finDeLaPartida(p,j));
 }
