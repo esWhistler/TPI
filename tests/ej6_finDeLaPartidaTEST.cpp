@@ -77,6 +77,24 @@ TEST(finDeLaPartidaTEST, reyAhogado) { // Rey ahogado por torre blanca en (5, 6)
     EXPECT_EQ(j, VACIO);
 }
 
+TEST(finDeLaPartidaTEST, reyAhogadoPin) { // Rey ahogado por torre blanca en (5, 6), peón no puede moverse por pin
+    tablero t = {
+            {cVACIA, cVACIA, cALFIL_N, cVACIA, cVACIA, cVACIA, cVACIA, cREY_N},
+            {cVACIA, cPEON_N, cVACIA, cPEON_N, cVACIA, cVACIA, cVACIA, cPEON_N},
+            {cVACIA, cPEON_B, cVACIA, cTORRE_B, cVACIA, cPEON_N, cVACIA, cPEON_B},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cALFIL_B, cREY_B, cVACIA, cVACIA, cTORRE_B, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+    };
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
+
+    EXPECT_TRUE(finDeLaPartida(p,j));
+    EXPECT_EQ(j, VACIO);
+}
+
 TEST(finDeLaPartidaTEST, jaqueMultiple) { // Jaque múltiple por torre blanca en (0, 4) y alfil blanco en (5, 2)
     tablero t = {
             {cVACIA, cVACIA, cVACIA, cVACIA, cTORRE_B, cVACIA, cVACIA, cREY_N},
@@ -198,7 +216,7 @@ TEST(finDeLaPartidaTEST, jaqueSePuedeComerPorPeon) { // Jaque por alfil blanco e
     EXPECT_FALSE(finDeLaPartida(p,j));
 }
 
-TEST(finDeLaPartidaTEST, jaqueMatePiezaPineada) { // Jaque mate por torre blanca en (7, 7), no puede bloquearse por pin.
+TEST(finDeLaPartidaTEST, jaqueMatePiezaPineada1) { // Jaque mate por torre blanca en (7, 7), no puede bloquearse por pin.
     tablero t = {
             {cVACIA, cTORRE_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cTORRE_B, cVACIA, cVACIA, cALFIL_N, cREY_N},
@@ -207,6 +225,24 @@ TEST(finDeLaPartidaTEST, jaqueMatePiezaPineada) { // Jaque mate por torre blanca
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cREY_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cTORRE_B},
+    };
+    posicion p = make_pair(t, NEGRO);
+    int j = -1;
+
+    EXPECT_TRUE(finDeLaPartida(p,j));
+    EXPECT_EQ(j, BLANCO);
+}
+
+TEST(finDeLaPartidaTEST, jaqueMatePiezaPineada2) { // Jaque mate por torre blanca en (7, 7), no puede comerse por pin.
+    tablero t = {
+            {cVACIA, cTORRE_B, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cTORRE_B, cALFIL_N, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cREY_N},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cREY_B, cPEON_N, cVACIA},
+            {cVACIA, cTORRE_N, cVACIA, cVACIA, cVACIA, cPEON_N, cPEON_B, cVACIA},
+            {cVACIA, cTORRE_N, cVACIA, cVACIA, cVACIA, cPEON_B, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
+            {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA},
             {cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cVACIA, cTORRE_B},
     };
     posicion p = make_pair(t, NEGRO);
