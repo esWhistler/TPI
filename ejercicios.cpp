@@ -86,15 +86,29 @@ bool finDeLaPartida ( posicion const &p, int &j ) {
 
 // EJERCICIO 7
 bool hayJaqueDescubierto ( posicion const &p ) {
-    bool resp = false;
-    // completar codigo
-    return resp;
+    secuencia listaMovimientos = movimientosDelJugador(p, p.second);
+    bool hayDescubierto = false;
+
+    for (int i = 0; i < listaMovimientos.size() && !hayDescubierto; ++i) {
+        posicion siguiente = ejecutarMovimiento(p, listaMovimientos[i].first, listaMovimientos[i].second);
+        if(hayJaque(siguiente)){
+            hayDescubierto |= cantidadAtacantes(siguiente, coordenadaDelReyDeTurno(siguiente), p.second) > 1;
+            hayDescubierto |= piezaMovidaNoDioJaque(listaMovimientos[i].second, siguiente);
+        }
+    }
+
+    return hayDescubierto;
 }
 
 // EJERCICIO 8
 void ejecutarSecuenciaForzada ( posicion &p, secuencia s ) {
-    // completar codigo
-    return;
+    for (int i = 0; i < s.size(); ++i) {
+        p = ejecutarMovimiento(p, s[i].first, s[i].second);
+        secuencia listaMovimientos = movimientosDelJugador(p, p.second);
+        coordenada forzadoDe = listaMovimientos[0].first;
+        coordenada forzadoHasta = listaMovimientos[0].second;
+        p = ejecutarMovimiento(p, forzadoDe, forzadoHasta);
+    }
 }
 
 // EJERCICIO 9

@@ -472,10 +472,12 @@ secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c){
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int j = 0; j < ANCHO_TABLERO; ++j) {
             coordenada d = setCoord(i, j);
-            if (((movimientoPiezaValido(t, c, d) && t[i][j] == cVACIA) ||
-            (jugadorEn(t, d) == contrincante(j) && capturaPiezaValida(t, c, d))) &&
-            !movimientoDejaEnJaque(p, c, d)){
-                listaMovimientos.push_back(make_pair(c, d));
+            if(!movimientoMeDejaEnJaque(p, c, d)){
+                if(movimientoPiezaValido(t, c, d) && t[i][j] == cVACIA){
+                    listaMovimientos.push_back(make_pair(c, d));
+                }else if(capturaPiezaValida(t, c, d) && jugadorEn(t, d) == contrincante(j)){
+                    listaMovimientos.push_back(make_pair(c, d));
+                }
             }
         }
     }
@@ -498,6 +500,12 @@ posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d){
     return posSig;
 }
 
-bool movimientoDejaEnJaque(const posicion &p, coordenada c, coordenada d){
-    return hayJaque(ejecutarMovimiento(p, c, d));
+bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d){
+    posicion siguiente = ejecutarMovimiento(p, c, d);
+    siguiente.second = p.second;
+    return hayJaque(siguiente);
+}
+
+bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p){
+    return coordDelAtacanteDe(p, coordenadaDelReyDeTurno(p)) != piezaMovida;
 }

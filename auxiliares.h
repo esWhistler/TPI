@@ -79,6 +79,9 @@ bool ahogado(const posicion &p);
 secuencia movimientosDelJugador(const posicion &p, jugador j);
 secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c);
 posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d);
-bool movimientoDejaEnJaque(const posicion &p, coordenada c, coordenada d);
+bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d);
+
+//Ej7
+bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p);
 
 #endif //AJEDREZLITE_AUXILIARES_H
