@@ -73,9 +73,15 @@ void ordenarTablero ( posicion &p ) {
 
 // EJERCICIO 6
 bool finDeLaPartida ( posicion const &p, int &j ) {
-    bool resp = false;
-    // completar codigo
-    return resp;
+    bool fin = false;
+    if(hayJaqueMate(p)){
+        j = contrincante(p.second);
+        fin = true;
+    }else if(ahogado(p)){
+        j = 0;
+        fin = true;
+    }
+    return fin;
 }
 
 // EJERCICIO 7

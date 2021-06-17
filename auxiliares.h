@@ -24,7 +24,6 @@ tablero tableroActual (const posicion &p );
 int aparicionesEnTablero(const tablero &t, casilla p);
 int colorPieza(const tablero &t, coordenada c);
 jugador contrincante(jugador j);
-jugador jugadorDeTurno(posicion p);
 int piezaEn(const tablero &t, coordenada c);
 int jugadorEn(const tablero &t, coordenada c);
 
@@ -68,8 +67,17 @@ bool hayJaqueMate(const posicion &p);
 bool reyPuedeMoverse(const posicion &p);
 vector<coordenada> movimientosRey(const posicion &p);
 bool coordenadaValida(coordenada c);
-bool estaAtacadaPorJ(const tablero &t, coordenada c, jugador j);
+bool esJaqueMultiple(const posicion &p);
+int cantidadAtacantes(const posicion &p, coordenada c, jugador j);
 bool sePuedeBloquear(const posicion &p);
+bool sePuedeComer(const posicion &p);
+vector<casilla> casillasEntre(coordenada c, coordenada d);
 coordenada coordenadaDelReyDeTurno(const posicion &p);
+coordenada coordDelAtacanteDe(const posicion &p, coordenada c);
+bool empate(const posicion &p);
+bool soloReyes(const posicion &p);
+bool ahogado(const posicion &p);
+secuencia movimientosDelJugador(const posicion &p, jugador j);
+secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c);
 
 #endif //AJEDREZLITE_AUXILIARES_H

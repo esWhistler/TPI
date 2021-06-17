@@ -134,13 +134,14 @@ tablero tableroInicial() {
     };
 }
 
+//j es el atacante
 bool casillaAtacada(coordenada c, const tablero &t, jugador j) {
     bool estaAtacada = false;
     for (int i = 0; i < ANCHO_TABLERO && !estaAtacada; ++i) {
         for (int k = 0; k < ANCHO_TABLERO && !estaAtacada; ++k) {
             coordenada target = setCoord(i, k);
             if((target != c) && (jugadorEn(t, target) == j)){
-                estaAtacada |= ataca(t, target, c); //(4,5) (3, 4)
+                estaAtacada |= ataca(t, target, c);
             }
         }
     }
@@ -275,14 +276,15 @@ bool hayJaque(const posicion &p) {
     return res;
 }
 
-/*bool hayJaqueMate(const posicion &p) {
+bool hayJaqueMate(const posicion &p) {
     return hayJaque(p) && !reyPuedeMoverse(p) && !esJaqueMultiple(p)
     // esJaqueMultiple existe porque si mas de una pieza da jaque a la vez nunca se puede bloquear o comer ambas, asi que habria que mover el rey, pero ya vimos que no es posible
     && !sePuedeBloquear(p) && !sePuedeComer(p);
-}*/
+}
 
 bool reyPuedeMoverse(const posicion &p) {
     vector<coordenada> movimientosDelRey = movimientosRey(p);
+    return !movimientosDelRey.empty();
 }
 
 vector<coordenada> movimientosRey(const posicion &p) {
@@ -298,7 +300,7 @@ vector<coordenada> movimientosRey(const posicion &p) {
     for (int i = reyI - 1; i <= reyI + 1; ++i) {
         for (int j = reyJ - 1; j <= reyJ + 1; ++j) {
             coordenada c = setCoord(i, j);
-            if(coordenadaValida(c) && !estaAtacadaPorJ(t, c, contrincante(j)) && jugadorEn(t, c) != j) movimientos.push_back(c);
+            if(coordenadaValida(c) && !casillaAtacada(c, t, contrincante(j)) && jugadorEn(t, c) != j) movimientos.push_back(c);
         }
     }
     return movimientos;
@@ -308,36 +310,95 @@ bool coordenadaValida(coordenada c) {
     return 0 <= c.first && c.first < ANCHO_TABLERO && 0 <= c.second && c.second < ANCHO_TABLERO;
 }
 
-bool estaAtacadaPorJ(const tablero &t, coordenada c, jugador j) {
-    bool estaAtacada = false;
+bool esJaqueMultiple(const posicion &p){
+    const jugador &j = p.second;
+    return cantidadAtacantes(p, coordenadaDelReyDeTurno(p), contrincante(j)) > 1;
+}
 
-    for (int i = 0; i < ANCHO_TABLERO && !estaAtacada; ++i) {
-        for (int k = 0; k < ANCHO_TABLERO && !estaAtacada; ++k) {
-            coordenada potencialAtacante = setCoord(i, k);
-            if(jugadorEn(t, potencialAtacante) == j){
-                estaAtacada &= capturaValida(t, potencialAtacante, c);
-            }
+//cuantas veces j ataca c
+int cantidadAtacantes(const posicion &p, coordenada c, jugador j){
+    const tablero &t = p.first;
+    int atacantes = 0;
+
+    for (int i = 0; i < ANCHO_TABLERO; ++i) {
+        for (int k = 0; k < ANCHO_TABLERO; ++k) {
+            if(jugadorEn(t, setCoord(i, k)) == j && ataca(t, setCoord(i, k), c)) atacantes++;
         }
     }
 
-    return estaAtacada;
+    return atacantes;
 }
 
-/*bool sePuedeBloquear(const posicion &p) {
+//solo se usa en jaque
+bool sePuedeBloquear(const posicion &p) {
     coordenada coordRey = coordenadaDelReyDeTurno(p);
-    vector<casilla> casillasEntreAtacanteYRey = casillasEntre(coordRey, coordDelAtacanteDe(p, coordRey));
-    int cantCasillasEntre = casillasEntreAtacanteYRey.size();
+    coordenada coordAtacante = coordDelAtacanteDe(p, coordRey);
     tablero const &t = p.first;
     jugador j = p.second;
 
-    bool res = false;
+    bool sePuedeBloquear = false;
 
-    for (int i = 0; i < cantCasillasEntre && !res; ++i) {
-        res |= estaAtacadaPorJ(t, casillasEntreAtacanteYRey[i], j);
+    vector<coordenada> casillasEntreReyYAtacante = casillasEntre(coordRey, coordAtacante);
+
+    //recorro el vector de coordenadas
+    for (int i = 0; i < casillasEntreReyYAtacante.size() && !sePuedeBloquear; ++i) {
+
+        //recorro el tablero
+        for (int k = 0; k < ANCHO_TABLERO; ++k) {
+            for (int l = 0; l < ANCHO_TABLERO; ++l) {
+                coordenada c = setCoord(k, l);
+                sePuedeBloquear |= jugadorEn(t, c) == j && movimientoPiezaValido(t, c, casillasEntreReyYAtacante[i]);
+            }
+        }
     }
+    return sePuedeBloquear;
+}
 
-    return res;
-}*/
+//solo se usa en jaque
+bool sePuedeComer(const posicion &p){
+    coordenada coordRey = coordenadaDelReyDeTurno(p);
+    coordenada coordAtacante = coordDelAtacanteDe(p, coordRey);
+    tablero const &t = p.first;
+    jugador j = p.second;
+
+    return casillaAtacada(coordAtacante, t, j);
+}
+
+vector<casilla> casillasEntre(coordenada c, coordenada d){
+    vector<casilla> casillas;
+    if(c.first == d.first){
+        int desde = min(c.second, d.second);
+        int hasta = max(c.second, d.second);
+        for (int i = desde + 1; i < hasta; ++i) {
+            casillas.push_back(mp(c.first, i));
+        }
+    }else if(c.second == d.second){
+        int desde = min(c.first, d.first);
+        int hasta = max(c.first, d.first);
+        for (int i = desde + 1; i < hasta; ++i) {
+            casillas.push_back(mp(i, c.second));
+        }
+    }else{
+        int desdei = c.first;
+        int desdej = c.second;
+
+        int hastai = d.first;
+        int hastaj = d.second;
+
+        int modi = (desdei - hastai > 0 ? -1 : +1);
+        int modj = (desdej - hastaj > 0 ? -1 : +1);
+
+        desdei += modi;
+        desdej += modj;
+
+        while(desdei != hastai) {
+            casillas.push_back(mp(desdei, desdej));
+            desdei += modi;
+            desdej += modj;
+        }
+    }
+    return casillas;
+}
 
 coordenada coordenadaDelReyDeTurno(const posicion &p) {
     coordenada coordRey;
@@ -355,6 +416,71 @@ coordenada coordenadaDelReyDeTurno(const posicion &p) {
     return coordRey;
 }
 
-secuencia movimientosDelJugador(const posicion &p, jugador j) {
+coordenada coordDelAtacanteDe(const posicion &p, coordenada c){
+    coordenada resultado = setCoord(-1, -1);
+    const tablero &t = p.first;
+    for (int i = 0; i < ANCHO_TABLERO && resultado == setCoord(-1, -1); ++i) {
+        for (int j = 0; j < ANCHO_TABLERO && resultado == setCoord(-1, -1); ++j) {
+            coordenada potencialAtacante = setCoord(i, j);
+            if(jugadorEn(t, potencialAtacante) == contrincante(jugadorEn(t, c)) && ataca(t, potencialAtacante, c)) {
+                resultado = potencialAtacante;
+            }
+        }
+    }
 
+    return resultado;
+}
+
+bool empate(const posicion &p){
+    return soloReyes(p) || ahogado(p);
+}
+
+bool soloReyes(const posicion &p){
+    const tablero &t = p.first;
+    bool empataron = true;
+
+    for (int i = 0; i < ANCHO_TABLERO && empataron; ++i) {
+        for (int j = 0; j < ANCHO_TABLERO && empataron; ++j) {
+            if(t[i][j] != cVACIA && piezaEn(t, setCoord(i, j)) != REY) empataron = false;
+        }
+    }
+
+    return empataron;
+}
+
+bool ahogado(const posicion &p){
+    return movimientosDelJugador(p, p.second).empty() && !hayJaque(p);
+}
+
+secuencia movimientosDelJugador(const posicion &p, jugador j) {
+    secuencia  listaMovimientos;
+    const tablero &t = p.first;
+
+    for (int i = 0; i < ANCHO_TABLERO; ++i) {
+        for (int k = 0; k < ANCHO_TABLERO; ++k) {
+            coordenada c = setCoord(i, k);
+            if(jugadorEn(t, c) == j){
+                secuencia listaMovPieza = movimientosDeLaPiezaEn(p, c);
+                listaMovimientos.insert(listaMovimientos.end(), listaMovPieza.begin(), listaMovPieza.end());
+            }
+        }
+    }
+
+    return listaMovimientos;
+}
+
+secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c){
+    const tablero &t = p.first;
+    secuencia listaMovimientos;
+
+    for (int i = 0; i < ANCHO_TABLERO; ++i) {
+        for (int j = 0; j < ANCHO_TABLERO; ++j) {
+            coordenada d = setCoord(i, j);
+            if (movimientoPiezaValido(t, c, d) || (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d))){
+                listaMovimientos.push_back(make_pair(c, d));
+            }
+        }
+    }
+
+    return listaMovimientos;
 }
