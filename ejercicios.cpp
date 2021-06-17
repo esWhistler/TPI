@@ -86,7 +86,7 @@ bool finDeLaPartida ( posicion const &p, int &j ) {
 
 // EJERCICIO 7
 bool hayJaqueDescubierto ( posicion const &p ) {
-    secuencia listaMovimientos = movimientosDelJugador(p, p.second);
+    secuencia listaMovimientos = jugadasDelJugador(p.first, p.second);
     bool hayDescubierto = false;
 
     for (int i = 0; i < listaMovimientos.size() && !hayDescubierto; ++i) {
@@ -104,7 +104,7 @@ bool hayJaqueDescubierto ( posicion const &p ) {
 void ejecutarSecuenciaForzada ( posicion &p, secuencia s ) {
     for (int i = 0; i < s.size(); ++i) {
         p = ejecutarMovimiento(p, s[i].first, s[i].second);
-        secuencia listaMovimientos = movimientosDelJugador(p, p.second);
+        secuencia listaMovimientos = jugadasDelJugador(p.first, p.second);
         coordenada forzadoDe = listaMovimientos[0].first;
         coordenada forzadoHasta = listaMovimientos[0].second;
         p = ejecutarMovimiento(p, forzadoDe, forzadoHasta);

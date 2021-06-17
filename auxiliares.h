@@ -77,10 +77,12 @@ coordenada coordDelAtacanteDe(const posicion &p, coordenada c);
 bool empate(const posicion &p);
 bool soloReyes(const posicion &p);
 bool ahogado(const posicion &p);
-secuencia movimientosDelJugador(const posicion &p, jugador j);
-secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c);
+vector< pair<pieza, coordenada> > piezasDelJugador(const tablero &t, jugador j);
+secuencia jugadasDelJugador(const tablero &t, jugador j);
+secuencia jugadasDeLaPiezaEn(const tablero &t, coordenada c);
+bool esJugadaLegal(const tablero &t, coordenada c, coordenada d);
+bool movimientoMeDejaEnJaque(const tablero &t, coordenada c, coordenada d);
 posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d);
-bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d);
 
 //Ej7
 bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p);

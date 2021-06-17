@@ -30,7 +30,7 @@ tablero inicializarTablero() {
 }
 
 jugador contrincante(jugador j) {
-    return (j == 1 ? 2 : 1);
+    return (j == VACIO ? VACIO : (j == BLANCO ? NEGRO : BLANCO));
 }
 
 
@@ -281,10 +281,18 @@ bool hayJaque(const posicion &p) {
     return res;
 }
 
+/*
 bool hayJaqueMate(const posicion &p) {
     return hayJaque(p) && !reyPuedeMoverse(p) && (esJaqueMultiple(p) ||
     // esJaqueMultiple existe porque si mas de una pieza da jaque a la vez nunca se puede bloquear o comer ambas, asi que habria que mover el rey, pero ya vimos que no es posible
     !sePuedeBloquear(p) && !sePuedeComer(p));
+}
+*/
+
+bool hayJaqueMate(const posicion &p) {
+    const tablero &t = p.first;
+    jugador j = p.second;
+    return hayJaque(p) && jugadasDelJugador(t, j).empty();
 }
 
 // Revisa si el rey de turno puede moverse
@@ -469,48 +477,68 @@ bool soloReyes(const posicion &p) {
 }
 
 bool ahogado(const posicion &p) {
-    return movimientosDelJugador(p, p.second).empty() && !hayJaque(p);
+    const tablero &t = p.first;
+    jugador j = p.second;
+    return jugadasDelJugador(t, j).empty() && !hayJaque(p);
 }
 
-secuencia movimientosDelJugador(const posicion &p, jugador j) {
-    secuencia  listaMovimientos;
-    const tablero &t = p.first;
+vector< pair<pieza, coordenada> > piezasDelJugador(const tablero &t, jugador j) {
+    vector< pair<pieza, coordenada> > piezas;
 
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
             coordenada c = setCoord(i, k);
             if (jugadorEn(t, c) == j) {
-                secuencia listaMovPieza = movimientosDeLaPiezaEn(p, c);
-                listaMovimientos.insert(listaMovimientos.end(), listaMovPieza.begin(), listaMovPieza.end());
+                piezas.emplace_back(piezaEn(t, c), c);
             }
         }
     }
 
-    return listaMovimientos;
+    return piezas;
 }
 
-secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c){
-    const tablero &t = p.first;
-    jugador j = p.second;
+secuencia jugadasDelJugador(const tablero &t, jugador j) {
+    secuencia jugadas;
 
-    assert(j == jugadorEn(t, c));
+    auto piezas = piezasDelJugador(t, j);
 
-    secuencia listaMovimientos;
+    for (auto pieza : piezas) {
+        coordenada c = pieza.second;
+        secuencia jugadasPieza = jugadasDeLaPiezaEn(t, c);
+        jugadas.insert(jugadas.end(), jugadasPieza.begin(), jugadasPieza.end());
+    }
+
+    return jugadas;
+}
+
+secuencia jugadasDeLaPiezaEn(const tablero &t, coordenada c){
+    secuencia jugadas;
+    jugador j = jugadorEn(t, c);
 
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
             coordenada d = setCoord(i, k);
-            bool movimientoValido = movimientoPiezaValido(t, c, d) && casillaEn(t, d) == cVACIA;
-            bool capturaValida = capturaPiezaValida(t, c, d) && jugadorEn(t, d) == contrincante(j);
-            if (movimientoValido || capturaValida) {
-                if (!movimientoMeDejaEnJaque(p, c, d)) {
-                    listaMovimientos.push_back(make_pair(c, d));
-                }
+            if (esJugadaLegal(t, c, d)) {
+                jugadas.emplace_back(c, d);
             }
         }
     }
 
-    return listaMovimientos;
+    return jugadas;
+}
+
+bool esJugadaLegal(const tablero &t, coordenada c, coordenada d) {
+    bool movimientoValido = movimientoPiezaValido(t, c, d) && casillaEn(t, d) == cVACIA;
+    bool capturaValida = capturaPiezaValida(t, c, d) && jugadorEn(t, d) == contrincante(jugadorEn(t, c));
+    return (movimientoValido || capturaValida) && !movimientoMeDejaEnJaque(t, c, d);
+}
+
+bool movimientoMeDejaEnJaque(const tablero &t, coordenada c, coordenada d) {
+    jugador j = jugadorEn(t, c);
+    posicion p = make_pair(t, j);
+    posicion pSiguiente = ejecutarMovimiento(p, c, d);
+    pSiguiente.second = j; // Cambiamos el jugador de turno para que hayJaque revise por j.
+    return hayJaque(pSiguiente);
 }
 
 posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d) {
