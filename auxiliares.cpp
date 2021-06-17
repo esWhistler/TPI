@@ -1,5 +1,6 @@
 #include "definiciones.h"
 #include "auxiliares.h"
+#include <cassert>
 
 using namespace std;
 // aqui se pueden ubicar todas las funciones auxiliares de soporte para la resolucion de los ejercicios
@@ -149,22 +150,23 @@ bool casillaAtacada(coordenada c, const tablero &t, jugador j) {
 }
 
 bool capturaPiezaValida(const tablero &t, coordenada c, coordenada d) {
-    return (c != cVACIA) &&
+    return c != d &&
            ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
-            (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
+           (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
 }
 
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d) {
-    return  (piezaEn(t, c) == PEON && movimientoValidoPeon(jugadorEn(t, c), c, d)) ||
+    return  c != d &&
+            ((piezaEn(t, c) == PEON && movimientoValidoPeon(jugadorEn(t, c), c, d)) ||
             (piezaEn(t, c) == ALFIL && movimientoValidoAlfil(t, c, d)) ||
             (piezaEn(t, c) == TORRE && movimientoValidoTorre(t, c, d)) ||
-            (piezaEn(t, c) == REY && movimientoValidoRey(c, d));
+            (piezaEn(t, c) == REY && movimientoValidoRey(c, d)));
 }
 
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
     return (c.second == d.second) &&
            ((j == BLANCO && c.first == d.first + 1) ||
-            (j == NEGRO && c.first == d.first - 1));
+           (j == NEGRO && c.first == d.first - 1));
 }
 
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d) {
@@ -172,6 +174,8 @@ bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d) {
 }
 
 bool hayBloqueoAlfil(const tablero &t, coordenada c, coordenada d) {
+    assert(c != d); // Importante por potencial segfault;
+    
     bool hayBloqueo = false;
 
     int desdei = c.first;
@@ -187,7 +191,8 @@ bool hayBloqueoAlfil(const tablero &t, coordenada c, coordenada d) {
     desdej += modj;
 
     while(desdei != hastai && !hayBloqueo) {
-        hayBloqueo |= t[desdei][desdej] != cVACIA;
+        coordenada c = setCoord(desdei, desdej);
+        hayBloqueo |= casillaEn(t, c) != cVACIA;
         desdei += modi;
         desdej += modj;
     }
@@ -239,6 +244,10 @@ bool capturaPeonValida(const tablero &t, coordenada c, coordenada d) {
         (jugadorEn(t, c) == NEGRO && c.first == d.first - 1));
 }
 
+void setCasilla(tablero &t, coordenada c, casilla x) {
+    t[c.first][c.second] = x;
+}
+
 casilla casillaEn(const tablero &t, coordenada c) {
     return t[c.first][c.second];
 }
@@ -258,14 +267,14 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d) {
 }
 
 bool hayJaque(const posicion &p) {
-    tablero const &t = p.first;
+    const tablero &t = p.first;
     jugador j = p.second;
     coordenada coordDelRey = coordenadaDelReyDeTurno(p);
     bool res = false;
     for (int i = 0; i < ANCHO_TABLERO && !res; ++i) {
         for (int k = 0; k < ANCHO_TABLERO && !res; ++k) {
             coordenada potencialAtacante = setCoord(i, k);
-            res = res || ((jugadorEn(t, potencialAtacante) == contrincante(j)) && capturaPiezaValida(t, potencialAtacante, coordDelRey));
+            res |= (jugadorEn(t, potencialAtacante) == contrincante(j)) && capturaPiezaValida(t, potencialAtacante, coordDelRey);
         }
     }
     return res;
@@ -430,20 +439,21 @@ bool empate(const posicion &p){
     return soloReyes(p) || ahogado(p);
 }
 
-bool soloReyes(const posicion &p){
+bool soloReyes(const posicion &p) {
     const tablero &t = p.first;
     bool empataron = true;
 
     for (int i = 0; i < ANCHO_TABLERO && empataron; ++i) {
         for (int j = 0; j < ANCHO_TABLERO && empataron; ++j) {
-            if(t[i][j] != cVACIA && piezaEn(t, setCoord(i, j)) != REY) empataron = false;
+            coordenada c = setCoord(i, j);
+            if(casillaEn(t, c) != cVACIA && piezaEn(t, c) != REY) empataron = false;
         }
     }
 
     return empataron;
 }
 
-bool ahogado(const posicion &p){
+bool ahogado(const posicion &p) {
     return movimientosDelJugador(p, p.second).empty() && !hayJaque(p);
 }
 
@@ -454,7 +464,7 @@ secuencia movimientosDelJugador(const posicion &p, jugador j) {
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
             coordenada c = setCoord(i, k);
-            if(jugadorEn(t, c) == j){
+            if (jugadorEn(t, c) == j) {
                 secuencia listaMovPieza = movimientosDeLaPiezaEn(p, c);
                 listaMovimientos.insert(listaMovimientos.end(), listaMovPieza.begin(), listaMovPieza.end());
             }
@@ -472,10 +482,10 @@ secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c){
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int j = 0; j < ANCHO_TABLERO; ++j) {
             coordenada d = setCoord(i, j);
-            if(!movimientoMeDejaEnJaque(p, c, d)){
-                if(movimientoPiezaValido(t, c, d) && t[i][j] == cVACIA){
-                    listaMovimientos.push_back(make_pair(c, d));
-                }else if(capturaPiezaValida(t, c, d) && jugadorEn(t, d) == contrincante(j)){
+            bool movimientoValido = movimientoPiezaValido(t, c, d) && casillaEn(t, d) == cVACIA;
+            bool capturaValida = capturaPiezaValida(t, c, d) && jugadorEn(t, d) == contrincante(j);
+            if (movimientoValido || capturaValida) {
+                if (!movimientoMeDejaEnJaque(p, c, d)) {
                     listaMovimientos.push_back(make_pair(c, d));
                 }
             }
@@ -485,25 +495,37 @@ secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c){
     return listaMovimientos;
 }
 
-posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d){
-    posicion posSig = make_pair(p.first, contrincante(p.second));
-    tablero &t = posSig.first;
+posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d) {
+    const tablero &t1 = p.first;
+    jugador j = p.second;
 
-    if(piezaEn(t, c) == PEON && d.first == 0) {
-        t[d.first][d.second] = cTORRE_B;
-    }else if(piezaEn(t, c) == PEON && d.first == 7){
-        t[d.first][d.second] = cTORRE_N;
-    }else{
-        t[d.first][d.second] = t[c.first][c.second];
+    assert(j == jugadorEn(t1, c));
+
+    posicion pSiguiente = make_pair(t1, contrincante(j));
+    tablero &t2 = pSiguiente.first;
+
+    assert(&t1 != &t2); // Para asegurarnos de que make_pair copie
+
+    if (piezaEn(t2, c) == PEON && d.first == 0) {
+        setCasilla(t2, d, cTORRE_B);
+    } else if (piezaEn(t2, c) == PEON && d.first == 7) {
+        setCasilla(t2, d, cTORRE_N);
+    } else {
+        setCasilla(t2, d, casillaEn(t2, c));
     }
-    t[c.first][c.second] = cVACIA;
-    return posSig;
+    setCasilla(t2, c, cVACIA);
+
+    return pSiguiente;
 }
 
-bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d){
-    posicion siguiente = ejecutarMovimiento(p, c, d);
-    siguiente.second = p.second;
-    return hayJaque(siguiente);
+bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d) {
+    const tablero &t = p.first;
+    jugador j = p.second;
+
+    assert(j == jugadorEn(t, c));
+
+    posicion pSiguiente = ejecutarMovimiento(p, c, d);
+    return hayJaque(pSiguiente);
 }
 
 bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p){

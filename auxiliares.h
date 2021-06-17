@@ -26,6 +26,7 @@ int colorPieza(const tablero &t, coordenada c);
 jugador contrincante(jugador j);
 int piezaEn(const tablero &t, coordenada c);
 int jugadorEn(const tablero &t, coordenada c);
+void setCasilla(tablero &t, coordenada c, casilla x);
 
 //Ej1
 bool esJugadorValido(jugador j);
