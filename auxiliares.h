@@ -46,7 +46,7 @@ bool cantidadTorresValidas(const tablero &t);
 tablero tableroInicial();
 
 //Ej3
-bool casillaAtacada(coordenada c, const tablero &t, jugador j);
+bool casillaAtacada(const tablero &t, coordenada c, jugador j);
 bool capturaPiezaValida(const tablero &t, casilla c, casilla d);
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d);
@@ -68,10 +68,10 @@ bool reyPuedeMoverse(const posicion &p);
 vector<coordenada> movimientosRey(const posicion &p);
 bool coordenadaValida(coordenada c);
 bool esJaqueMultiple(const posicion &p);
-int cantidadAtacantes(const posicion &p, coordenada c, jugador j);
+int cantidadAtacantes(const tablero &t, coordenada c, jugador j);
 bool sePuedeBloquear(const posicion &p);
 bool sePuedeComer(const posicion &p);
-vector<casilla> casillasEntre(coordenada c, coordenada d);
+vector<casilla> coordenadasEntre(coordenada c, coordenada d);
 coordenada coordenadaDelReyDeTurno(const posicion &p);
 coordenada coordDelAtacanteDe(const posicion &p, coordenada c);
 bool empate(const posicion &p);

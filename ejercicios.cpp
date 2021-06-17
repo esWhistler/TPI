@@ -20,7 +20,7 @@ vector <coordenada> casillasAtacadas ( posicion const &p, int j ) {
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
             coordenada c = setCoord(i, k);
-            if(casillaAtacada(c, tablero, j)){
+            if(casillaAtacada(tablero, c, j)){
                 cA.push_back(c);
             }
         }
@@ -92,7 +92,7 @@ bool hayJaqueDescubierto ( posicion const &p ) {
     for (int i = 0; i < listaMovimientos.size() && !hayDescubierto; ++i) {
         posicion siguiente = ejecutarMovimiento(p, listaMovimientos[i].first, listaMovimientos[i].second);
         if(hayJaque(siguiente)){
-            hayDescubierto |= cantidadAtacantes(siguiente, coordenadaDelReyDeTurno(siguiente), p.second) > 1;
+            hayDescubierto |= cantidadAtacantes(siguiente.first, coordenadaDelReyDeTurno(siguiente), p.second) > 1;
             hayDescubierto |= piezaMovidaNoDioJaque(listaMovimientos[i].second, siguiente);
         }
     }
