@@ -46,7 +46,7 @@ tablero tableroInicial();
 
 //Ej3
 bool casillaAtacada(coordenada c, const tablero &t, jugador j);
-bool ataca(const tablero &t, casilla c, casilla d);
+bool capturaPiezaValida(const tablero &t, casilla c, casilla d);
 bool movimientoPiezaValido(const tablero &t, coordenada c, coordenada d);
 bool movimientoValidoPeon(jugador j, coordenada c, coordenada d);
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d);
@@ -61,7 +61,6 @@ bool jugadaValida(const tablero &t1, const tablero &t2, coordenada o, coordenada
 bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d);
 
 //Ej6
-bool capturaValida(const tablero &t, coordenada c, coordenada d);
 bool hayJaque(const posicion &p);
 bool hayJaqueMate(const posicion &p);
 bool reyPuedeMoverse(const posicion &p);
@@ -79,5 +78,7 @@ bool soloReyes(const posicion &p);
 bool ahogado(const posicion &p);
 secuencia movimientosDelJugador(const posicion &p, jugador j);
 secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c);
+posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d);
+bool movimientoDejaEnJaque(const posicion &p, coordenada c, coordenada d);
 
 #endif //AJEDREZLITE_AUXILIARES_H

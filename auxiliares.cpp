@@ -141,14 +141,14 @@ bool casillaAtacada(coordenada c, const tablero &t, jugador j) {
         for (int k = 0; k < ANCHO_TABLERO && !estaAtacada; ++k) {
             coordenada target = setCoord(i, k);
             if((target != c) && (jugadorEn(t, target) == j)){
-                estaAtacada |= ataca(t, target, c);
+                estaAtacada |= capturaPiezaValida(t, target, c);
             }
         }
     }
     return estaAtacada;
 }
 
-bool ataca(const tablero &t, coordenada c, coordenada d) {
+bool capturaPiezaValida(const tablero &t, coordenada c, coordenada d) {
     return (c != cVACIA) &&
            ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
             (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
@@ -257,20 +257,15 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d) {
             (movimientoValidoPeon(jugadorEn(t, o), o, d) || capturaPeonValida(t, o, d));
 }
 
-bool capturaValida(const tablero &t, coordenada c, coordenada d) {
-    return (contrincante(piezaEn(t, c)) == piezaEn(t, d)) &&
-        ((piezaEn(t, c) != PEON && movimientoPiezaValido(t, c, d)) ||
-        (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d)));
-}
-
 bool hayJaque(const posicion &p) {
     tablero const &t = p.first;
+    jugador j = p.second;
     coordenada coordDelRey = coordenadaDelReyDeTurno(p);
     bool res = false;
     for (int i = 0; i < ANCHO_TABLERO && !res; ++i) {
-        for (int j = 0; j < ANCHO_TABLERO && !res; ++j) {
-            coordenada potencialAtacante = setCoord(i, j);
-            res &= capturaValida(t, potencialAtacante, coordDelRey);
+        for (int k = 0; k < ANCHO_TABLERO && !res; ++k) {
+            coordenada potencialAtacante = setCoord(i, k);
+            res = res || ((jugadorEn(t, potencialAtacante) == contrincante(j)) && capturaPiezaValida(t, potencialAtacante, coordDelRey));
         }
     }
     return res;
@@ -322,7 +317,7 @@ int cantidadAtacantes(const posicion &p, coordenada c, jugador j){
 
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int k = 0; k < ANCHO_TABLERO; ++k) {
-            if(jugadorEn(t, setCoord(i, k)) == j && ataca(t, setCoord(i, k), c)) atacantes++;
+            if(jugadorEn(t, setCoord(i, k)) == j && capturaPiezaValida(t, setCoord(i, k), c)) atacantes++;
         }
     }
 
@@ -422,7 +417,7 @@ coordenada coordDelAtacanteDe(const posicion &p, coordenada c){
     for (int i = 0; i < ANCHO_TABLERO && resultado == setCoord(-1, -1); ++i) {
         for (int j = 0; j < ANCHO_TABLERO && resultado == setCoord(-1, -1); ++j) {
             coordenada potencialAtacante = setCoord(i, j);
-            if(jugadorEn(t, potencialAtacante) == contrincante(jugadorEn(t, c)) && ataca(t, potencialAtacante, c)) {
+            if(jugadorEn(t, potencialAtacante) == contrincante(jugadorEn(t, c)) && capturaPiezaValida(t, potencialAtacante, c)) {
                 resultado = potencialAtacante;
             }
         }
@@ -471,16 +466,38 @@ secuencia movimientosDelJugador(const posicion &p, jugador j) {
 
 secuencia movimientosDeLaPiezaEn(const posicion &p, coordenada c){
     const tablero &t = p.first;
+    jugador j = p.second;
     secuencia listaMovimientos;
 
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
         for (int j = 0; j < ANCHO_TABLERO; ++j) {
             coordenada d = setCoord(i, j);
-            if (movimientoPiezaValido(t, c, d) || (piezaEn(t, c) == PEON && capturaPeonValida(t, c, d))){
+            if (((movimientoPiezaValido(t, c, d) && t[i][j] == cVACIA) ||
+            (jugadorEn(t, d) == contrincante(j) && capturaPiezaValida(t, c, d))) &&
+            !movimientoDejaEnJaque(p, c, d)){
                 listaMovimientos.push_back(make_pair(c, d));
             }
         }
     }
 
     return listaMovimientos;
+}
+
+posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d){
+    posicion posSig = make_pair(p.first, contrincante(p.second));
+    tablero &t = posSig.first;
+
+    if(piezaEn(t, c) == PEON && d.first == 0) {
+        t[d.first][d.second] = cTORRE_B;
+    }else if(piezaEn(t, c) == PEON && d.first == 7){
+        t[d.first][d.second] = cTORRE_N;
+    }else{
+        t[d.first][d.second] = t[c.first][c.second];
+    }
+    t[c.first][c.second] = cVACIA;
+    return posSig;
+}
+
+bool movimientoDejaEnJaque(const posicion &p, coordenada c, coordenada d){
+    return hayJaque(ejecutarMovimiento(p, c, d));
 }
