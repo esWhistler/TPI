@@ -1,6 +1,6 @@
 #include "definiciones.h"
 #include "auxiliares.h"
-#include <cassert>
+//#include <cassert>
 
 using namespace std;
 // aqui se pueden ubicar todas las funciones auxiliares de soporte para la resolucion de los ejercicios
@@ -184,11 +184,11 @@ bool movimientoValidoPeon(jugador j, coordenada c, coordenada d) {
 }
 
 bool movimientoValidoAlfil(const tablero &t, coordenada c, coordenada d) {
-    return abs(c.first - d.first) == abs(c.second - d.second) && !hayBloqueoAlfil(t, c, d);
+    return c != d && abs(c.first - d.first) == abs(c.second - d.second) && !hayBloqueoAlfil(t, c, d);
 }
 
 bool hayBloqueoAlfil(const tablero &t, coordenada c, coordenada d) {
-    assert(c != d); // Importante por potencial segfault;
+    //assert(c != d); // Importante por potencial segfault;
 
     bool hayBloqueo = false;
 
@@ -205,8 +205,8 @@ bool hayBloqueoAlfil(const tablero &t, coordenada c, coordenada d) {
     desdej += modj;
 
     while(desdei != hastai && !hayBloqueo) {
-        coordenada c = setCoord(desdei, desdej);
-        hayBloqueo |= casillaEn(t, c) != cVACIA;
+        coordenada e = setCoord(desdei, desdej);
+        hayBloqueo |= casillaEn(t, e) != cVACIA;
         desdei += modi;
         desdej += modj;
     }
@@ -551,12 +551,12 @@ posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d) {
     const tablero &t1 = p.first;
     jugador j = p.second;
 
-    assert(j == jugadorEn(t1, c));
+    //assert(j == jugadorEn(t1, c));
 
     posicion pSiguiente = make_pair(t1, contrincante(j));
     tablero &t2 = pSiguiente.first;
 
-    assert(&t1 != &t2); // Para asegurarnos de que make_pair copie
+    //assert(&t1 != &t2); // Para asegurarnos de que make_pair copie
 
     if (piezaEn(t2, c) == PEON && d.first == 0) {
         setCasilla(t2, d, cTORRE_B);
