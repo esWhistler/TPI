@@ -4,7 +4,7 @@
 
 using namespace std;
 // aqui se pueden ubicar todas las funciones auxiliares de soporte para la resolucion de los ejercicios
-pair<int,int> mp(int a, int b) {
+__attribute__((unused)) pair<int,int> mp(int a, int b) {
     return make_pair(a, b);
 }
 
@@ -23,20 +23,35 @@ tablero tableroActual ( posicion const &p ) {
     return p.first;
 }
 
-tablero inicializarTablero() {
+__attribute__((unused)) tablero inicializarTablero() {
     vector<casilla> fila(ANCHO_TABLERO, cVACIA);
     tablero out(ANCHO_TABLERO, fila);
     return out;
 }
 
+//Auxiliares
+
 jugador contrincante(jugador j) {
     return (j == VACIO ? VACIO : (j == BLANCO ? NEGRO : BLANCO));
 }
 
-
-bool esJugadorValido(jugador j) {
-    return j == NEGRO || j == BLANCO;
+pieza piezaEn(const tablero &t, coordenada c) {
+    return t[c.first][c.second].first;
 }
+
+jugador jugadorEn(const tablero &t, coordenada c) {
+    return t[c.first][c.second].second;
+}
+
+void setCasilla(tablero &t, coordenada c, casilla x) {
+    t[c.first][c.second] = x;
+}
+
+casilla casillaEn(const tablero &t, coordenada c) {
+    return t[c.first][c.second];
+}
+
+//Ej1
 
 bool esTableroValido(const tablero &t) {
     return esMatriz8(t) && casillasValidas(t) && sinPeonesNoCoronados(t) && cantidadValidaDePiezas(t);
@@ -71,12 +86,8 @@ bool esPiezaValida(pieza p) {
     return PEON <= p && p <= REY;
 }
 
-pieza piezaEn(const tablero &t, coordenada c) {
-    return t[c.first][c.second].first;
-}
-
-jugador jugadorEn(const tablero &t, coordenada c) {
-    return t[c.first][c.second].second;
+bool esJugadorValido(jugador j) {
+    return j == NEGRO || j == BLANCO;
 }
 
 bool sinPeonesNoCoronados(const tablero &t) {
@@ -122,6 +133,8 @@ int aparicionesEnTablero(const tablero &t, casilla p) {
     return apariciones;
 }
 
+//Ej2
+
 tablero tableroInicial() {
     return {
             {cTORRE_N, cVACIA, cALFIL_N, cVACIA, cREY_N, cALFIL_N, cVACIA, cTORRE_N},
@@ -135,6 +148,7 @@ tablero tableroInicial() {
     };
 }
 
+//Ej3
 //j es el atacante
 bool casillaAtacada(const tablero &t, coordenada c, jugador j) {
     bool estaAtacada = false;
@@ -244,14 +258,7 @@ bool capturaPeonValida(const tablero &t, coordenada c, coordenada d) {
         (jugadorEn(t, c) == NEGRO && c.first == d.first - 1));
 }
 
-void setCasilla(tablero &t, coordenada c, casilla x) {
-    t[c.first][c.second] = x;
-}
-
-casilla casillaEn(const tablero &t, coordenada c) {
-    return t[c.first][c.second];
-}
-
+//Ej4
 bool jugadaValida(const tablero &t1, const tablero &t2, coordenada o, coordenada d) {
     pieza piezaMovida = piezaEn(t1, o);
     pieza piezaDestino = piezaEn(t2, d);
@@ -266,11 +273,12 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d) {
             (movimientoValidoPeon(jugadorEn(t, o), o, d) || capturaPeonValida(t, o, d));
 }
 
+//Ej6
 // Revisa si el jugador de turno está en jaque.
 bool hayJaque(const posicion &p) {
     const tablero &t = p.first;
     jugador j = p.second;
-    coordenada coordDelRey = coordenadaDelReyDeTurno(p);
+    coordenada coordDelRey = coordenadaDelRey(p, p.second);
     bool res = false;
     for (int i = 0; i < ANCHO_TABLERO && !res; ++i) {
         for (int k = 0; k < ANCHO_TABLERO && !res; ++k) {
@@ -296,15 +304,15 @@ bool hayJaqueMate(const posicion &p) {
 }
 
 // Revisa si el rey de turno puede moverse
-bool reyPuedeMoverse(const posicion &p) {
+/*bool reyPuedeMoverse(const posicion &p) {
     vector<coordenada> movimientosDelRey = movimientosRey(p);
     return !movimientosDelRey.empty();
-}
+}*/
 
-vector<coordenada> movimientosRey(const posicion &p) {
+/*vector<coordenada> movimientosRey(const posicion &p) {
     vector<coordenada> movimientos;
 
-    coordenada coordenadaRey = coordenadaDelReyDeTurno(p);
+    coordenada coordenadaRey = coordenadaDelRey(p, p.second);
     int reyI = coordenadaRey.first;
     int reyK = coordenadaRey.second;
 
@@ -318,17 +326,17 @@ vector<coordenada> movimientosRey(const posicion &p) {
         }
     }
     return movimientos;
-}
+}*/
 
-bool coordenadaValida(coordenada c) {
+/*bool coordenadaValida(coordenada c) {
     return 0 <= c.first && c.first < ANCHO_TABLERO && 0 <= c.second && c.second < ANCHO_TABLERO;
-}
+}*/
 
-bool esJaqueMultiple(const posicion &p){
+/*bool esJaqueMultiple(const posicion &p){
     const tablero &t = p.first;
     jugador j = p.second;
-    return cantidadAtacantes(t, coordenadaDelReyDeTurno(p), contrincante(j)) > 1;
-}
+    return cantidadAtacantes(t, coordenadaDelRey(p, p.second), contrincante(j)) > 1;
+}*/
 
 // cuantas veces j ataca c
 int cantidadAtacantes(const tablero &t, coordenada d, jugador j){
@@ -345,11 +353,11 @@ int cantidadAtacantes(const tablero &t, coordenada d, jugador j){
 }
 
 // solo se usa en jaque
-bool sePuedeBloquear(const posicion &p) {
+/*bool sePuedeBloquear(const posicion &p) {
     tablero const &t = p.first;
     jugador j = p.second;
 
-    coordenada coordRey = coordenadaDelReyDeTurno(p);
+    coordenada coordRey = coordenadaDelRey(p, p.second);
     coordenada coordAtacante = coordDelAtacanteDe(p, coordRey);
 
     vector<coordenada> coordenadasEntreReyYAtacante = coordenadasEntre(coordRey, coordAtacante);
@@ -362,25 +370,24 @@ bool sePuedeBloquear(const posicion &p) {
             for (int l = 0; l < ANCHO_TABLERO; ++l) {
                 coordenada c = setCoord(k, l);
                 sePuedeBloquear |= jugadorEn(t, c) == j && piezaEn(t, c) != REY && movimientoPiezaValido(t, c, coordenadasEntreReyYAtacante[i]);
-                // todo: falta chequear que la jugada es legal (no deja en jaque).
             }
         }
     }
 
     return sePuedeBloquear;
-}
+}*/
 
 // solo se usa en jaque
-bool sePuedeComer(const posicion &p){
-    coordenada coordRey = coordenadaDelReyDeTurno(p);
+/*bool sePuedeComer(const posicion &p){
+    coordenada coordRey = coordenadaDelRey(p, p.second);
     coordenada coordAtacante = coordDelAtacanteDe(p, coordRey);
     tablero const &t = p.first;
     jugador j = p.second;
 
-    return casillaAtacada(t, coordAtacante, j); // todo: falta chequear que la jugada es legal (no deja en jaque).
-}
+    return casillaAtacada(t, coordAtacante, j);
+}*/
 
-vector<coordenada> coordenadasEntre(coordenada c, coordenada d) {
+/*vector<coordenada> coordenadasEntre(coordenada c, coordenada d) {
     vector<coordenada> coordenadas;
 
     if (c != d) {
@@ -421,13 +428,12 @@ vector<coordenada> coordenadasEntre(coordenada c, coordenada d) {
     }
 
     return coordenadas;
-}
+}*/
 
-coordenada coordenadaDelReyDeTurno(const posicion &p) {
+coordenada coordenadaDelRey(const posicion &p, jugador j) {
     coordenada coordRey;
 
     const tablero &t = p.first;
-    jugador j = p.second;
 
     bool encontreLaCoordenada = false;
     for (int i = 0; i < ANCHO_TABLERO && !encontreLaCoordenada; ++i) {
@@ -564,7 +570,7 @@ posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d) {
     return pSiguiente;
 }
 
-bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d) {
+/*bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d) {
     const tablero &t = p.first;
     jugador j = p.second;
 
@@ -573,10 +579,22 @@ bool movimientoMeDejaEnJaque(const posicion &p, coordenada c, coordenada d) {
     posicion pSiguiente = ejecutarMovimiento(p, c, d);
     pSiguiente.second = j; // Cambiamos el jugador de turno para que hayJaque revise por j.
     return hayJaque(pSiguiente);
+}*/
+
+//Ej7
+bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p){
+    return coordDelAtacanteDe(p, coordenadaDelRey(p, p.second)) != piezaMovida;
 }
 
-bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p){
-    return coordDelAtacanteDe(p, coordenadaDelReyDeTurno(p)) != piezaMovida;
+//Ej9
+bool hayMovimientosQueImplicanMate(const posicion &p){
+    secuencia listaMovimientos = jugadasDelJugador(p.first, p.second);
+    bool encontreMate = false;
+    for (int i = 0; i < listaMovimientos.size() && !encontreMate; ++i){
+        posicion q = ejecutarMovimiento(p, listaMovimientos[i].first, listaMovimientos[i].second);
+        if(hayJaqueMate(q)) encontreMate = true;
+    }
+    return encontreMate;
 }
 
 vector<pair<coordenada, coordenada>> listaMovimientosForzantes(const posicion &p){
@@ -605,12 +623,4 @@ int cantidadJugadasLegales(const posicion &p){
     return jugadasDelJugador(p.first, p.second).size();
 }
 
-bool hayMovimientosQueImplicanMate(const posicion &p){
-    secuencia listaMovimientos = jugadasDelJugador(p.first, p.second);
-    bool encontreMate = false;
-    for (int i = 0; i < listaMovimientos.size() && !encontreMate; ++i){
-        posicion q = ejecutarMovimiento(p, listaMovimientos[i].first, listaMovimientos[i].second);
-        if(hayJaqueMate(q)) encontreMate = true;
-    }
-    return encontreMate;
-}
+

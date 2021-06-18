@@ -92,7 +92,7 @@ bool hayJaqueDescubierto ( posicion const &p ) {
     for (int i = 0; i < listaMovimientos.size() && !hayDescubierto; ++i) {
         posicion siguiente = ejecutarMovimiento(p, listaMovimientos[i].first, listaMovimientos[i].second);
         if(hayJaque(siguiente)){
-            hayDescubierto |= cantidadAtacantes(siguiente.first, coordenadaDelReyDeTurno(siguiente), p.second) > 1;
+            hayDescubierto |= cantidadAtacantes(siguiente.first, coordenadaDelRey(siguiente, siguiente.second), p.second) > 1;
             hayDescubierto |= piezaMovidaNoDioJaque(listaMovimientos[i].second, siguiente);
         }
     }
@@ -124,7 +124,7 @@ int seVieneElJaqueEn ( posicion const & p ) {
     if(hayMovimientosQueImplicanMate(p)){
         cardinalMates = ES_MATE_EN_UNO;
     } else {
-        auto listaMovimientos = listaMovimientosForzantes(p);
+        secuencia listaMovimientos = listaMovimientosForzantes(p);
         for (int i = 0; i < listaMovimientos.size() && cardinalMates != 2; i++) {
             posicion q = p;
             secuencia s;
