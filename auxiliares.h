@@ -1,6 +1,3 @@
-//
-
-
 #ifndef AJEDREZLITE_AUXILIARES_H
 #define AJEDREZLITE_AUXILIARES_H
 
@@ -13,11 +10,9 @@ typedef int jugador;
 typedef int pieza;
 
 // definir aqui las funciones
-__attribute__((unused)) pair<int,int> mp(int a, int b);
 vector<pair<int,int>> ordenarVectorPares(vector<pair<int,int>> &v);
 coordenada setCoord(int i, int j);
 tablero tableroActual (const posicion &p );
-__attribute__((unused)) tablero inicializarTablero();
 
 //Auxiliares
 jugador contrincante(jugador j);
@@ -62,14 +57,7 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d);
 //Ej6
 bool hayJaque(const posicion &p);
 bool hayJaqueMate(const posicion &p);
-bool reyPuedeMoverse(const posicion &p);
-vector<coordenada> movimientosRey(const posicion &p);
-bool coordenadaValida(coordenada c);
-bool esJaqueMultiple(const posicion &p);
 int cantidadAtacantes(const tablero &t, coordenada c, jugador j);
-bool sePuedeBloquear(const posicion &p);
-bool sePuedeComer(const posicion &p);
-vector<casilla> coordenadasEntre(coordenada c, coordenada d);
 coordenada coordenadaDelRey(const posicion &p, jugador j);
 coordenada coordDelAtacanteDe(const posicion &p, coordenada c);
 bool empate(const posicion &p);
