@@ -87,4 +87,9 @@ posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d);
 //Ej7
 bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p);
 
+//Ej9
+int cantidadJugadasLegales(const posicion &p);
+bool hayMovimientosQueImplicanMate(const posicion &p);
+vector<pair<coordenada, coordenada>> listaMovimientosForzantes(const posicion &p);
+
 #endif //AJEDREZLITE_AUXILIARES_H

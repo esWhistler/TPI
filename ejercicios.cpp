@@ -113,7 +113,29 @@ void ejecutarSecuenciaForzada ( posicion &p, secuencia s ) {
 
 // EJERCICIO 9
 int seVieneElJaqueEn ( posicion const & p ) {
-    int resp = -1;
-    // completar codigo
-    return resp;
+    // podrian ser macros ///////
+    const int ES_MATE_EN_UNO = 1;
+    const int ES_MATE_EN_DOS = 2;
+    const int ES_MATE_EN_TRES = 3;
+    //////////////////////////////
+
+    int cardinalMates = 0;
+
+    if(hayMovimientosQueImplicanMate(p)){
+        cardinalMates = ES_MATE_EN_UNO;
+    } else {
+        auto listaMovimientos = listaMovimientosForzantes(p);
+        for (int i = 0; i < listaMovimientos.size() && cardinalMates != 2; i++) {
+            posicion q = p;
+            secuencia s;
+            s.push_back(listaMovimientos[i]);
+            ejecutarSecuenciaForzada(q, s);
+            if(hayMovimientosQueImplicanMate(q)){
+                cardinalMates = ES_MATE_EN_DOS;
+            }
+        }
+        if(cardinalMates == 0) cardinalMates = ES_MATE_EN_TRES;
+    }
+
+    return cardinalMates;
 }

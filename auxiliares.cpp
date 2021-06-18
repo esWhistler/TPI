@@ -579,63 +579,38 @@ bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p){
     return coordDelAtacanteDe(p, coordenadaDelReyDeTurno(p)) != piezaMovida;
 }
 
-vector<pair<coordenada, coordenada>> movimientoForzado(const posicion &p)
-{
-    vector<pair<coordenada, coordenada>> movimientoForzado;
+vector<pair<coordenada, coordenada>> listaMovimientosForzantes(const posicion &p){
+    vector<pair<coordenada, coordenada>> movimientosForzantes;
     jugador j = p.second;
 
-    for(int i = 0; i < ANCHO_TABLERO; i++)
-        for(int k = 0; k < ANCHO_TABLERO; k++)
-        {
-            coordenada desde = setCoord(i, k);
-            casilla casillaDondeEstoyParado = casillaEn(p.first, desde);
-            if(casillaDondeEstoyParado.second == j)
-            {
-                vector<coordenada> casillasPermitidas = coordenadasEntre(p, desde);
-                int n_casillasPermitidas = casillasPermitidas.size();
+    auto piezas = piezasDelJugador(p.first, j);
+    for (auto & pieza : piezas) {
 
-                for(int m = 0; m < n_casillasPermitidas; m++)
-                {
-                    coordenada hasta = casillasPermitidas[m];
-                    posicion posSig = ejecutarMovimiento(p, desde, hasta);
-                    if(casillasPermitidas(posSig) == 1)
-                        movimientoForzado.push_back(desde, hasta);
-                }
-            }
+        coordenada desde = pieza.second;
+
+        secuencia jugadasPermitidas = jugadasDeLaPiezaEn(p.first, desde);
+        int n_jugadasPermitidas = jugadasPermitidas.size();
+
+        for(int m = 0; m < n_jugadasPermitidas; m++){// m es el par coordenada coordenada que describe una jugada, la first es desde donde y la second es hasta donde{
+            coordenada hasta = jugadasPermitidas[m].second;
+            posicion posSig = ejecutarMovimiento(p, desde, hasta);
+            if(cantidadJugadasLegales(posSig) == 1)
+                movimientosForzantes.emplace_back(desde, hasta);
         }
-    return movimientoForzado;
+    }
+    return movimientosForzantes;
 }
 
-int seVieneElJaqueEn(const posicion &p)
-{
-    // podrian ser macros ///////
-    const int ES_MATE_EN_UNO = 1;
-    const int ES_MATE_EN_DOS = 2;
-    const int ES_MATE_EN_TRES = 3;
-    //////////////////////////////
+int cantidadJugadasLegales(const posicion &p){
+    return jugadasDelJugador(p.first, p.second).size();
+}
 
-    int cardinalMates = 0;
-
-    posicion pInicial = p;
-    if(hayMovimientosQueImplicanMate(p)) // Falta hacerla.
-        return ES_MATE_EN_UNO;
-
-    else
-    {
-
-        // Falta hacerlo, pero queremos que itere movimientoForzado para ver si E un mate luego de
-        // forzar al contricante a moverse.
-        if(cardinalMates > 3)
-            break;
-
-
+bool hayMovimientosQueImplicanMate(const posicion &p){
+    secuencia listaMovimientos = jugadasDelJugador(p.first, p.second);
+    bool encontreMate = false;
+    for (int i = 0; i < listaMovimientos.size() && !encontreMate; ++i){
+        posicion q = ejecutarMovimiento(p, listaMovimientos[i].first, listaMovimientos[i].second);
+        if(hayJaqueMate(q)) encontreMate = true;
     }
-
-    if(cardinalMates == 2)
-        return ES_MATE_EN_DOS;
-    else
-        return ES_MATE_EN_TRES;
-
-
-    return -1;
+    return encontreMate;
 }
