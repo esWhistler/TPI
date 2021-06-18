@@ -9,17 +9,15 @@ using namespace std;
 typedef int jugador;
 typedef int pieza;
 
-// definir aqui las funciones
+//Auxiliares y predicados generales
 vector<pair<int,int>> ordenarVectorPares(vector<pair<int,int>> &v);
 coordenada setCoord(int i, int j);
-tablero tableroActual (const posicion &p );
-
-//Auxiliares
+tablero tableroActual (const posicion &p);
 jugador contrincante(jugador j);
 int piezaEn(const tablero &t, coordenada c);
 int jugadorEn(const tablero &t, coordenada c);
-void setCasilla(tablero &t, coordenada c, casilla x);
 casilla casillaEn(const tablero &t, coordenada c);
+void setCasilla(tablero &t, coordenada c, casilla x);
 
 //Ej1
 bool esTableroValido(const tablero &t);

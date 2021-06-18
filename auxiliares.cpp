@@ -3,10 +3,11 @@
 
 using namespace std;
 
-// TEST
+
+//Auxiliares y predicados generales
+
 vector<pair<int,int>> ordenarVectorPares(vector<pair<int,int>> &v) {
     sort(v.begin(), v.end());
-//    v.erase(unique(v.begin(), v.end()), v.end());
     return v;
 }
 
@@ -17,8 +18,6 @@ coordenada setCoord(int i, int j) {
 tablero tableroActual ( posicion const &p ) {
     return p.first;
 }
-
-//Auxiliares
 
 jugador contrincante(jugador j) {
     return (j == VACIO ? VACIO : (j == BLANCO ? NEGRO : BLANCO));
@@ -32,13 +31,14 @@ jugador jugadorEn(const tablero &t, coordenada c) {
     return t[c.first][c.second].second;
 }
 
+casilla casillaEn(const tablero &t, coordenada c) {
+    return t[c.first][c.second];
+}
+
 void setCasilla(tablero &t, coordenada c, casilla x) {
     t[c.first][c.second] = x;
 }
 
-casilla casillaEn(const tablero &t, coordenada c) {
-    return t[c.first][c.second];
-}
 
 //Ej1
 
@@ -122,6 +122,7 @@ int aparicionesEnTablero(const tablero &t, casilla p) {
     return apariciones;
 }
 
+
 //Ej2
 
 tablero tableroInicial() {
@@ -137,7 +138,9 @@ tablero tableroInicial() {
     };
 }
 
+
 //Ej3
+
 //j es el atacante
 bool casillaAtacada(const tablero &t, coordenada c, jugador j) {
     bool estaAtacada = false;
@@ -245,7 +248,9 @@ bool capturaPeonValida(const tablero &t, coordenada c, coordenada d) {
         (jugadorEn(t, c) == NEGRO && c.first == d.first - 1));
 }
 
+
 //Ej4
+
 bool jugadaValida(const tablero &t1, const tablero &t2, coordenada o, coordenada d) {
     pieza piezaMovida = piezaEn(t1, o);
     pieza piezaDestino = piezaEn(t2, d);
@@ -261,6 +266,7 @@ bool esMovDePeonCoronado(const tablero &t, coordenada o, coordenada d) {
 }
 
 //Ej6
+
 // Revisa si el jugador de turno está en jaque.
 bool hayJaque(const posicion &p) {
     const tablero &t = p.first;
@@ -283,7 +289,7 @@ bool hayJaqueMate(const posicion &p) {
 }
 
 // cuantas veces j ataca c
-int cantidadAtacantes(const tablero &t, coordenada d, jugador j){
+int cantidadAtacantes(const tablero &t, coordenada d, jugador j) {
     int atacantes = 0;
 
     for (int i = 0; i < ANCHO_TABLERO; ++i) {
@@ -315,7 +321,7 @@ coordenada coordenadaDelRey(const posicion &p, jugador j) {
     return coordRey;
 }
 
-coordenada coordDelAtacanteDe(const posicion &p, coordenada c){
+coordenada coordDelAtacanteDe(const posicion &p, coordenada c) {
     coordenada resultado = setCoord(-1, -1);
     const tablero &t = p.first;
     for (int i = 0; i < ANCHO_TABLERO && resultado == setCoord(-1, -1); ++i) {
@@ -383,7 +389,7 @@ secuencia jugadasDelJugador(const tablero &t, jugador j) {
     return jugadas;
 }
 
-secuencia jugadasDeLaPiezaEn(const tablero &t, coordenada c){
+secuencia jugadasDeLaPiezaEn(const tablero &t, coordenada c) {
     secuencia jugadas;
     jugador j = jugadorEn(t, c);
 
@@ -432,13 +438,17 @@ posicion ejecutarMovimiento(const posicion &p, coordenada c, coordenada d) {
     return pSiguiente;
 }
 
+
 //Ej7
-bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p){
+
+bool piezaMovidaNoDioJaque(coordenada piezaMovida, const posicion &p) {
     return coordDelAtacanteDe(p, coordenadaDelRey(p, p.second)) != piezaMovida;
 }
 
+
 //Ej9
-bool hayMovimientosQueImplicanMate(const posicion &p){
+
+bool hayMovimientosQueImplicanMate(const posicion &p) {
     secuencia listaMovimientos = jugadasDelJugador(p.first, p.second);
     bool encontreMate = false;
     for (int i = 0; i < listaMovimientos.size() && !encontreMate; ++i){
@@ -448,7 +458,7 @@ bool hayMovimientosQueImplicanMate(const posicion &p){
     return encontreMate;
 }
 
-vector<pair<coordenada, coordenada>> listaMovimientosForzantes(const posicion &p){
+vector<pair<coordenada, coordenada>> listaMovimientosForzantes(const posicion &p) {
     vector<pair<coordenada, coordenada>> movimientosForzantes;
     jugador j = p.second;
 
@@ -470,7 +480,7 @@ vector<pair<coordenada, coordenada>> listaMovimientosForzantes(const posicion &p
     return movimientosForzantes;
 }
 
-int cantidadJugadasLegales(const posicion &p){
+int cantidadJugadasLegales(const posicion &p) {
     return jugadasDelJugador(p.first, p.second).size();
 }
 
